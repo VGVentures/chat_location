@@ -30,7 +30,7 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
-_\*Chat Location works on iOS, Android, and Web._
+_\*Chat Location works on iOS and Android._
 
 ---
 
