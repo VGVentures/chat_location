@@ -7,6 +7,7 @@
 
 import 'package:chat_location/channel_list/channel_list.dart';
 import 'package:chat_repository/chat_repository.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chat_location/app/app.dart';
 import 'package:mocktail/mocktail.dart';
@@ -15,14 +16,23 @@ class MockChatRepository extends Mock implements ChatRepository {}
 
 void main() {
   group('App', () {
+    const userId = 'test-user-id';
+
+    late Widget Function(Widget) builder;
     late ChatRepository chatRepository;
 
     setUp(() {
+      builder = (_) => _;
       chatRepository = MockChatRepository();
     });
 
     testWidgets('renders ChannelListPage', (tester) async {
-      await tester.pumpWidget(App(chatRepository: chatRepository));
+      when(() => chatRepository.getUserId()).thenReturn(userId);
+
+      await tester.pumpWidget(
+        App(builder: builder, chatRepository: chatRepository),
+      );
+
       expect(find.byType(ChannelListPage), findsOneWidget);
     });
   });
