@@ -11,7 +11,7 @@ class ChatRepository {
   final StreamChatClient _chatClient;
 
   /// Join a messaging channel with the provided [id].
-  void joinMessagingChannel({required String id}) {
-    _chatClient.watchChannel('messaging', channelId: id);
+  Future<void> joinMessagingChannel({required String id}) {
+    return _chatClient.watchChannel('messaging', channelId: id);
   }
 }

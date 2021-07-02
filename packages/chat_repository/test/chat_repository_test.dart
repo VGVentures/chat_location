@@ -21,14 +21,16 @@ void main() {
     group('joinMessagingChannel', () {
       const channelId = 'test-channel-id';
 
-      test('joins correct messaging channel based on the provided id', () {
+      test('joins messaging channel with the provided id', () {
         when(
           () => chatClient.watchChannel(
             any(),
             channelId: any(named: 'channelId'),
           ),
         ).thenAnswer((_) async => FakeChannelState());
-        chatRepository.joinMessagingChannel(id: channelId);
+
+        expect(chatRepository.joinMessagingChannel(id: channelId), completes);
+
         verify(
           () => chatClient.watchChannel('messaging', channelId: channelId),
         ).called(1);
