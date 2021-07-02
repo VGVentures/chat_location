@@ -33,6 +33,7 @@ void main() {
         App(builder: builder, chatRepository: chatRepository),
       );
 
+      expect(tester.takeException(), isAssertionError);
       expect(find.byType(ChannelListPage), findsOneWidget);
     });
   });
