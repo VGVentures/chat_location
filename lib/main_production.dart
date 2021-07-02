@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:chat_repository/chat_repository.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:chat_location/app/app.dart';
@@ -20,8 +21,15 @@ void main() {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
+  final chatClient = StreamChatClient(
+    const String.fromEnvironment('STREAM_API_KEY'),
+    logLevel: Level.OFF,
+  );
+
+  final chatRepository = ChatRepository(chatClient: chatClient);
+
   runZonedGuarded(
-    () => runApp(const App()),
+    () => runApp(App(chatRepository: chatRepository)),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }
