@@ -1,11 +1,40 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:mocktail/mocktail.dart';
+import 'package:stream_chat/stream_chat.dart';
 import 'package:test/test.dart';
 import 'package:chat_repository/chat_repository.dart';
 
+class MockStreamChatClient extends Mock implements StreamChatClient {}
+
+class FakeChannelState extends Fake implements ChannelState {}
+
 void main() {
   group('ChatRepository', () {
-    test('can be instantiated', () {
-      expect(ChatRepository(), isNotNull);
+    late StreamChatClient chatClient;
+    late ChatRepository chatRepository;
+
+    setUp(() {
+      chatClient = MockStreamChatClient();
+      chatRepository = ChatRepository(chatClient: chatClient);
+    });
+
+    group('joinMessagingChannel', () {
+      const channelId = 'test-channel-id';
+
+      test('joins messaging channel with the provided id', () {
+        when(
+          () => chatClient.watchChannel(
+            any(),
+            channelId: any(named: 'channelId'),
+          ),
+        ).thenAnswer((_) async => FakeChannelState());
+
+        expect(chatRepository.joinMessagingChannel(id: channelId), completes);
+
+        verify(
+          () => chatClient.watchChannel('messaging', channelId: channelId),
+        ).called(1);
+      });
     });
   });
 }
