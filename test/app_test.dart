@@ -5,10 +5,10 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:chat_location/channel_list/channel_list.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chat_location/app/app.dart';
-import 'package:chat_location/counter/counter.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockChatRepository extends Mock implements ChatRepository {}
@@ -21,9 +21,9 @@ void main() {
       chatRepository = MockChatRepository();
     });
 
-    testWidgets('renders CounterPage', (tester) async {
+    testWidgets('renders ChannelListPage', (tester) async {
       await tester.pumpWidget(App(chatRepository: chatRepository));
-      expect(find.byType(CounterPage), findsOneWidget);
+      expect(find.byType(ChannelListPage), findsOneWidget);
     });
   });
 }
