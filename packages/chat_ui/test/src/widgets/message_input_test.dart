@@ -14,7 +14,6 @@ class MockChannelClientState extends Mock
     implements stream_chat_flutter.ChannelClientState {}
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
   group('MessageInput', () {
     late stream_chat_flutter.StreamChatClient client;
     late stream_chat_flutter.Channel channel;
