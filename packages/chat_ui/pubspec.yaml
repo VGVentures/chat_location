@@ -9,8 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  stream_chat_flutter: ^2.0.0-nullsafety.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^0.1.4
   very_good_analysis: ^2.1.0

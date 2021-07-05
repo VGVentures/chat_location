@@ -6,6 +6,10 @@ import 'package:chat_repository/chat_repository.dart';
 
 class MockStreamChatClient extends Mock implements StreamChatClient {}
 
+class MockClientState extends Mock implements ClientState {}
+
+class MockOwnUser extends Mock implements OwnUser {}
+
 class FakeChannelState extends Fake implements ChannelState {}
 
 class FakeEvent extends Fake implements Event {}
@@ -51,6 +55,40 @@ void main() {
             token,
           ),
         ).called(1);
+      });
+    });
+
+    group('getUserId', () {
+      const userId = 'test-user-id';
+
+      test('throws StateError when user has not connected', () {
+        final state = MockClientState();
+
+        when(() => chatClient.state).thenReturn(state);
+        when(() => state.user).thenReturn(null);
+
+        expect(
+          () => chatRepository.getUserId(),
+          throwsStateError,
+        );
+      });
+
+      test('returns correct user id when user has connected', () {
+        final state = MockClientState();
+        final user = MockOwnUser();
+
+        when(() => chatClient.state).thenReturn(state);
+        when(() => state.user).thenReturn(user);
+        when(() => user.id).thenReturn(userId);
+
+        expect(
+          chatRepository.getUserId(),
+          equals(userId),
+        );
+
+        verify(() => chatClient.state).called(1);
+        verify(() => state.user).called(1);
+        verify(() => user.id).called(1);
       });
     });
 

@@ -9,13 +9,15 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:chat_location/app/app_bloc_observer.dart';
 import 'package:chat_repository/chat_repository.dart';
-import 'package:flutter/widgets.dart';
+import 'package:chat_ui/chat_ui.dart' as chat_ui;
 
-typedef AppBuilder = FutureOr<Widget> Function({
-  required ChatRepository chatRepository,
-});
+typedef AppBuilder = FutureOr<Widget> Function(
+  Widget Function(Widget) builder,
+  ChatRepository chatRepository,
+);
 
 Future<void> bootstrap({required AppBuilder builder}) async {
   Bloc.observer = AppBlocObserver();
@@ -31,8 +33,30 @@ Future<void> bootstrap({required AppBuilder builder}) async {
   final chatClient = StreamChatClient(chatApiKey, logLevel: Level.OFF);
   final chatRepository = ChatRepository(chatClient: chatClient);
 
+  const chatToken = String.fromEnvironment('CHAT_TOKEN');
+  if (chatToken.isEmpty) {
+    throw StateError('missing environment variable <CHAT_TOKEN>');
+  }
+
+  const userId = 'neevash';
+  final avatarUri = Uri.https(
+    'getstream.imgix.net',
+    'images/random_svg/FS.png',
+  );
+  await chatRepository.connect(
+    userId: userId,
+    token: chatToken,
+    avatarUri: avatarUri,
+  );
+
   await runZonedGuarded(
-    () async => runApp(await builder(chatRepository: chatRepository)),
+    () async => runApp(await builder(
+      (child) => chat_ui.StreamChat(
+        client: chatClient,
+        child: child,
+      ),
+      chatRepository,
+    )),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

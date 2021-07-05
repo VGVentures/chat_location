@@ -10,6 +10,18 @@ class ChatRepository {
 
   final StreamChatClient _chatClient;
 
+  /// Return the current user's id.
+  /// Throws a [StateError] if called before calling [connect].
+  String getUserId() {
+    final user = _chatClient.state.user;
+    if (user == null) {
+      throw StateError(
+        'could not retrieve user. did you forget to call connect()?',
+      );
+    }
+    return user.id;
+  }
+
   /// Connect to chat with the provided [userId] and [token].
   /// An optional [avatarUri] can be provided to customize the current avatar.
   Future<void> connect({
