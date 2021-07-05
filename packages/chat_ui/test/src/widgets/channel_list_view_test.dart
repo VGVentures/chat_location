@@ -8,6 +8,8 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
 class MockStreamChatClient extends Mock
     implements stream_chat_flutter.StreamChatClient {}
 
+class MockChannel extends Mock implements stream_chat_flutter.Channel {}
+
 void main() {
   group('ChannelListView', () {
     late stream_chat_flutter.StreamChatClient client;
@@ -28,7 +30,7 @@ void main() {
             child: Material(
               child: ChannelListView(
                 userId: userId,
-                channelBuilder: (context) => const SizedBox(),
+                channelBuilder: (context, channel) => const SizedBox(),
               ),
             ),
           ),
@@ -56,7 +58,7 @@ void main() {
             child: Material(
               child: ChannelListView(
                 userId: userId,
-                channelBuilder: (context) {
+                channelBuilder: (context, channel) {
                   channelBuilderCallCount++;
                   return const SizedBox();
                 },
@@ -66,7 +68,13 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(ListTile).first);
+      final channelListViewFinder =
+          find.byType(stream_chat_flutter.ChannelListView);
+      final channelListView = tester
+          .widget<stream_chat_flutter.ChannelListView>(channelListViewFinder);
+
+      channelListView.onChannelTap?.call(MockChannel(), null);
+
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(channelBuilderCallCount, equals(1));

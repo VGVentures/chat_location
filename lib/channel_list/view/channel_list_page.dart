@@ -32,7 +32,7 @@ class ChannelListView extends StatelessWidget {
     final userId = context.select((ChannelListCubit bloc) => bloc.state.userId);
     return chat_ui.ChannelListView(
       userId: userId,
-      channelBuilder: (_) => const ChannelPage(),
+      channelBuilder: (_, channel) => ChannelPage(channel: channel),
     );
   }
 }

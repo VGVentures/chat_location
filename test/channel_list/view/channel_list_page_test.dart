@@ -12,6 +12,8 @@ class MockChatRepository extends Mock implements ChatRepository {}
 
 class FakeBuildContext extends Fake implements BuildContext {}
 
+class FakeChannel extends Fake implements Channel {}
+
 void main() {
   group('ChannelListPage', () {
     const userId = 'test-user-id';
@@ -61,7 +63,7 @@ void main() {
         channelListViewFinder,
       );
       expect(
-        channelListView.channelBuilder(FakeBuildContext()),
+        channelListView.channelBuilder(FakeBuildContext(), FakeChannel()),
         isA<ChannelPage>(),
       );
     });
