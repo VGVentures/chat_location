@@ -1,5 +1,5 @@
-import 'package:chat_location/channel/channel.dart';
 import 'package:chat_location/channel_list/channel_list.dart';
+import 'package:chat_location/message_list/message_list.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:flutter/material.dart';
@@ -50,7 +50,8 @@ void main() {
       expect(channelListView.userId, equals(userId));
     });
 
-    testWidgets('renders ChannelPage when channel is tapped', (tester) async {
+    testWidgets('renders MessageListPage when channel is tapped',
+        (tester) async {
       when(() => chatRepository.getUserId()).thenReturn(userId);
 
       await tester.pumpApp(
@@ -64,7 +65,7 @@ void main() {
       );
       expect(
         channelListView.channelBuilder(FakeBuildContext(), FakeChannel()),
-        isA<ChannelPage>(),
+        isA<MessageListPage>(),
       );
     });
   });

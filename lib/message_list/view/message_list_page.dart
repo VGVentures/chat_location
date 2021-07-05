@@ -1,9 +1,10 @@
 import 'package:chat_repository/chat_repository.dart';
+import 'package:chat_ui/chat_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ChannelPage extends StatelessWidget {
-  const ChannelPage({Key? key, required Channel channel})
+class MessageListPage extends StatelessWidget {
+  const MessageListPage({Key? key, required Channel channel})
       : _channel = channel,
         super(key: key);
 
@@ -15,6 +16,7 @@ class ChannelPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(_channel.team ?? 'Channel'),
       ),
+      body: const MessageListView(),
     );
   }
 }

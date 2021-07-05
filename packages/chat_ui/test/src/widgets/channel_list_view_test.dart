@@ -51,6 +51,8 @@ void main() {
     testWidgets('invokes ChannelBuilder when channel tapped', (tester) async {
       const userId = 'test-user-id';
       var channelBuilderCallCount = 0;
+      final channel = MockChannel();
+      when(() => channel.initialized).thenAnswer((_) async => true);
       await tester.pumpWidget(
         MaterialApp(
           home: stream_chat_flutter.StreamChat(
@@ -72,11 +74,9 @@ void main() {
           find.byType(stream_chat_flutter.ChannelListView);
       final channelListView = tester
           .widget<stream_chat_flutter.ChannelListView>(channelListViewFinder);
-
-      channelListView.onChannelTap?.call(MockChannel(), null);
+      channelListView.onChannelTap?.call(channel, null);
 
       await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
       expect(channelBuilderCallCount, equals(1));
     });
   });

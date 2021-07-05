@@ -30,7 +30,12 @@ class ChannelListView extends StatelessWidget {
         filter: stream_chat_flutter.Filter.in_('members', [userId]),
         onChannelTap: (channel, child) {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => channelBuilder(context, channel)),
+            MaterialPageRoute(
+              builder: (_) => stream_chat_flutter.StreamChannel(
+                channel: channel,
+                child: channelBuilder(context, channel),
+              ),
+            ),
           );
         },
       ),
