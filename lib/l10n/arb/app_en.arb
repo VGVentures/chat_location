@@ -3,5 +3,9 @@
     "channelListAppBarTitle": "Channels",
     "@channelListAppBarTitle": {
         "description": "Text shown in the AppBar of the Channel List Page"
+    },
+    "messageListAppBarTitle": "Messages",
+    "@messageListAppBarTitle": {
+        "description": "Text shown in the AppBar of the Message List Page"
     }
 }
