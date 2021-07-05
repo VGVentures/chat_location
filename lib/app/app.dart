@@ -34,7 +34,8 @@ class App extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        builder: (_, __) => _builder(const ChannelListPage()),
+        home: const ChannelListPage(),
+        builder: (_, child) => _builder(child!),
       ),
     );
   }

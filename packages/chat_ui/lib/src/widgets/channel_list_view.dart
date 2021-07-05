@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     as stream_chat_flutter;
@@ -17,14 +18,21 @@ class ChannelListView extends StatelessWidget {
   final String userId;
 
   /// A [WidgetBuilder] responsible for building the UI for a single channel.
-  final WidgetBuilder channelBuilder;
+  final Widget Function(
+    BuildContext context,
+    stream_chat_flutter.Channel channel,
+  ) channelBuilder;
 
   @override
   Widget build(BuildContext context) {
     return stream_chat_flutter.ChannelsBloc(
       child: stream_chat_flutter.ChannelListView(
         filter: stream_chat_flutter.Filter.in_('members', [userId]),
-        channelWidget: channelBuilder(context),
+        onChannelTap: (channel, child) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => channelBuilder(context, channel)),
+          );
+        },
       ),
     );
   }
