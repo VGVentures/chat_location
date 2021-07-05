@@ -34,6 +34,11 @@ class MessageListView extends StatelessWidget {
     final channel = context.select(
       (MessageListCubit cubit) => cubit.state.channel,
     );
-    return chat_ui.MessageListView(channel: channel);
+    return Column(
+      children: [
+        Expanded(child: chat_ui.MessageListView(channel: channel)),
+        chat_ui.MessageInput(channel: channel),
+      ],
+    );
   }
 }
