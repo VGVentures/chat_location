@@ -37,6 +37,7 @@ void main() {
         MessageListPage(channel: channel),
       );
       await tester.pumpAndSettle();
+      await tester.takeException();
       expect(find.byType(MessageListView), findsOneWidget);
     });
   });
