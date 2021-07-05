@@ -15,7 +15,7 @@ class ChannelListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.channelListAppBarTitle)),
       body: BlocProvider(
-        create: (context) => ChannelListBloc(
+        create: (context) => ChannelListCubit(
           chatRepository: context.read<ChatRepository>(),
         ),
         child: const ChannelListView(),
@@ -29,7 +29,7 @@ class ChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.select((ChannelListBloc bloc) => bloc.state.userId);
+    final userId = context.select((ChannelListCubit bloc) => bloc.state.userId);
     return chat_ui.ChannelListView(
       userId: userId,
       channelBuilder: (_) => const ChannelPage(),

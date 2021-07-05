@@ -1,4 +1,4 @@
-part of 'channel_list_bloc.dart';
+part of 'channel_list_cubit.dart';
 
 class ChannelListState extends Equatable {
   const ChannelListState({required this.userId});

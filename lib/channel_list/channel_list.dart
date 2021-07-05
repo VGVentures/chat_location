@@ -1,2 +1,2 @@
-export 'bloc/channel_list_bloc.dart';
+export 'cubit/channel_list_cubit.dart';
 export 'view/channel_list_page.dart';

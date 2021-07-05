@@ -15,7 +15,15 @@ import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:mocktail/mocktail.dart';
 
-class MockStreamChatClient extends Mock implements StreamChatClient {}
+class FakeStreamChatClient extends Fake implements StreamChatClient {
+  @override
+  Stream<Event> on([
+    String? eventType,
+    String? eventType2,
+    String? eventType3,
+    String? eventType4,
+  ]) async* {}
+}
 
 class MockChatRepository extends Mock implements ChatRepository {}
 
@@ -31,7 +39,7 @@ extension PumpApp on WidgetTester {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: chat_ui.StreamChat(
-            client: MockStreamChatClient(),
+            client: FakeStreamChatClient(),
             child: widget,
           ),
         ),

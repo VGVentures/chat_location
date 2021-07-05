@@ -7,10 +7,12 @@
 
 import 'package:chat_location/channel_list/channel_list.dart';
 import 'package:chat_repository/chat_repository.dart';
-import 'package:flutter/widgets.dart';
+import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chat_location/app/app.dart';
 import 'package:mocktail/mocktail.dart';
+
+import 'helpers/helpers.dart';
 
 class MockChatRepository extends Mock implements ChatRepository {}
 
@@ -18,11 +20,9 @@ void main() {
   group('App', () {
     const userId = 'test-user-id';
 
-    late Widget Function(Widget) builder;
     late ChatRepository chatRepository;
 
     setUp(() {
-      builder = (_) => _;
       chatRepository = MockChatRepository();
     });
 
@@ -30,10 +30,17 @@ void main() {
       when(() => chatRepository.getUserId()).thenReturn(userId);
 
       await tester.pumpWidget(
-        App(builder: builder, chatRepository: chatRepository),
+        App(
+          builder: (child) {
+            return chat_ui.StreamChat(
+              client: FakeStreamChatClient(),
+              child: child,
+            );
+          },
+          chatRepository: chatRepository,
+        ),
       );
 
-      expect(tester.takeException(), isAssertionError);
       expect(find.byType(ChannelListPage), findsOneWidget);
     });
   });
