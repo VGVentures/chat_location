@@ -1,6 +1,5 @@
 import 'package:chat_location/message_list/message_list.dart';
 import 'package:chat_repository/chat_repository.dart';
-import 'package:chat_ui/chat_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -35,10 +34,7 @@ void main() {
       when(() => channelClientState.isUpToDate).thenReturn(true);
 
       await tester.pumpApp(
-        StreamChannel(
-          channel: channel,
-          child: MessageListPage(channel: channel),
-        ),
+        MessageListPage(channel: channel),
       );
       await tester.pumpAndSettle();
       expect(find.byType(MessageListView), findsOneWidget);

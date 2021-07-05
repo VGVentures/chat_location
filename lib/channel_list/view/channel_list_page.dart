@@ -29,7 +29,9 @@ class ChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.select((ChannelListCubit bloc) => bloc.state.userId);
+    final userId = context.select(
+      (ChannelListCubit cubit) => cubit.state.userId,
+    );
     return chat_ui.ChannelListView(
       userId: userId,
       channelBuilder: (_, channel) => MessageListPage(channel: channel),

@@ -31,10 +31,7 @@ class ChannelListView extends StatelessWidget {
         onChannelTap: (channel, child) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => stream_chat_flutter.StreamChannel(
-                channel: channel,
-                child: channelBuilder(context, channel),
-              ),
+              builder: (_) => channelBuilder(context, channel),
             ),
           );
         },

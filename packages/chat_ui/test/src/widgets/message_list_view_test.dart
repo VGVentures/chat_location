@@ -44,10 +44,7 @@ void main() {
         MaterialApp(
           home: stream_chat_flutter.StreamChat(
             client: client,
-            child: StreamChannel(
-              channel: channel,
-              child: const MessageListView(),
-            ),
+            child: MessageListView(channel: channel),
           ),
         ),
       );
