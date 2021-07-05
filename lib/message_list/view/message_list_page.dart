@@ -1,9 +1,9 @@
 import 'package:chat_location/message_list/message_list.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
+import 'package:chat_ui/chat_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:chat_location/l10n/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageListPage extends StatelessWidget {
@@ -15,9 +15,8 @@ class MessageListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.messageListAppBarTitle)),
+      appBar: ChannelAppBar(channel: _channel),
       body: BlocProvider(
         create: (context) => MessageListCubit(channel: _channel),
         child: const MessageListView(),
