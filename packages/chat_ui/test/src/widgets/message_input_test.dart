@@ -52,5 +52,56 @@ void main() {
       tester.takeException();
       expect(find.byType(stream_chat_flutter.MessageInput), findsOneWidget);
     });
+
+    testWidgets('supports adding attachments', (tester) async {
+      final controller = MessageInputController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: stream_chat_flutter.StreamChat(
+            client: client,
+            child: MessageInput(
+              channel: channel,
+              controller: controller,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      tester.takeException();
+      controller.addAttachment(stream_chat_flutter.Attachment());
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('invokes onGenerateAttachements', (tester) async {
+      final controller = MessageInputController();
+      var onGenerateAttachementThumbnailsCallCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: stream_chat_flutter.StreamChat(
+            client: client,
+            child: MessageInput(
+              controller: controller,
+              channel: channel,
+              onGenerateAttachementThumbnails: {
+                'custom': (context, details) {
+                  onGenerateAttachementThumbnailsCallCount++;
+                  return const SizedBox();
+                }
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      tester.takeException();
+      controller.addAttachment(stream_chat_flutter.Attachment(
+        type: 'custom',
+        uploadState: const stream_chat_flutter.UploadState.success(),
+        extraData: const {},
+      ));
+      await tester.pumpAndSettle();
+      tester.takeException();
+      expect(onGenerateAttachementThumbnailsCallCount, equals(1));
+    });
   });
 }
