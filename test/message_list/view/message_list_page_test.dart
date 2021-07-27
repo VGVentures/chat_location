@@ -62,7 +62,7 @@ void main() {
       await tester.pumpApp(
         BlocProvider.value(
           value: mockMessageListCubit,
-          child: const MessageListView(),
+          child: const Scaffold(body: MessageListView()),
         ),
       );
       await tester.pumpAndSettle();
@@ -78,7 +78,7 @@ void main() {
       await tester.pumpApp(
         BlocProvider.value(
           value: mockMessageListCubit,
-          child: const MessageListView(),
+          child: const Scaffold(body: MessageListView()),
         ),
       );
       await tester.pumpAndSettle();
@@ -94,7 +94,7 @@ void main() {
       await tester.pumpApp(
         BlocProvider.value(
           value: mockMessageListCubit,
-          child: const MessageListView(),
+          child: const Scaffold(body: MessageListView()),
         ),
       );
       await tester.pumpAndSettle();
@@ -114,7 +114,7 @@ void main() {
       await tester.pumpApp(
         BlocProvider.value(
           value: mockMessageListCubit,
-          child: const MessageListView(),
+          child: const Scaffold(body: MessageListView()),
         ),
       );
       await tester.tap(find.widgetWithIcon(IconButton, Icons.location_history));
@@ -124,7 +124,32 @@ void main() {
     });
 
     testWidgets('renders SnackBar when state changes to unavailable',
-        (tester) async {});
+        (tester) async {
+      final MessageListCubit mockMessageListCubit = MockMessageListCubit();
+      whenListen(
+        mockMessageListCubit,
+        Stream.fromIterable(<MessageListState>[
+          MessageListState(channel: channel),
+          MessageListState(
+            channel: channel,
+            location: const CurrentLocation(
+              latitude: 0,
+              longtitude: 0,
+              status: CurrentLocationStatus.unavailable,
+            ),
+          ),
+        ]),
+        initialState: MessageListState(channel: channel),
+      );
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: mockMessageListCubit,
+          child: const Scaffold(body: MessageListView()),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SnackBar), findsOneWidget);
+    });
 
     testWidgets('renders map thumbnail when state changes to available',
         (tester) async {});
