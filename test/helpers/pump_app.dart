@@ -14,6 +14,7 @@ import 'package:chat_location/l10n/l10n.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:mocktail/mocktail.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class FakeStreamChatClient extends Fake implements StreamChatClient {
   @override
@@ -28,22 +29,24 @@ class FakeStreamChatClient extends Fake implements StreamChatClient {
 class MockChatRepository extends Mock implements ChatRepository {}
 
 extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget, {ChatRepository? chatRepository}) {
-    return pumpWidget(
-      RepositoryProvider.value(
-        value: chatRepository ?? MockChatRepository(),
-        child: MaterialApp(
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: chat_ui.StreamChat(
-            client: FakeStreamChatClient(),
-            child: widget,
+  Future<void> pumpApp(Widget widget, {ChatRepository? chatRepository}) async {
+    await mockNetworkImages(() async {
+      await pumpWidget(
+        RepositoryProvider.value(
+          value: chatRepository ?? MockChatRepository(),
+          child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: chat_ui.StreamChat(
+              client: FakeStreamChatClient(),
+              child: widget,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
