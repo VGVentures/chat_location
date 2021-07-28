@@ -152,6 +152,32 @@ void main() {
     });
 
     testWidgets('renders map thumbnail when state changes to available',
-        (tester) async {});
+        (tester) async {
+      final MessageListCubit mockMessageListCubit = MockMessageListCubit();
+      whenListen(
+        mockMessageListCubit,
+        Stream.fromIterable(<MessageListState>[
+          MessageListState(channel: channel),
+          MessageListState(
+            channel: channel,
+            location: const CurrentLocation(
+              latitude: 0,
+              longtitude: 0,
+              status: CurrentLocationStatus.available,
+            ),
+          ),
+        ]),
+        initialState: MessageListState(channel: channel),
+      );
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: mockMessageListCubit,
+          child: const Scaffold(body: MessageListView()),
+        ),
+      );
+      await tester.pump();
+      await tester.takeException();
+      expect(find.byType(MapThumbnailImage), findsOneWidget);
+    });
   });
 }
