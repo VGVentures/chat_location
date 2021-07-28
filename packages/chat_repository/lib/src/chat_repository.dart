@@ -39,7 +39,7 @@ class ChatRepository {
   /// Return the current user's id.
   /// Throws a [StateError] if called before calling [connect].
   String getUserId() {
-    final user = _chatClient.state.user;
+    final user = _chatClient.state.currentUser;
     if (user == null) {
       throw StateError(
         'could not retrieve user. did you forget to call connect()?',

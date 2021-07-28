@@ -41,7 +41,7 @@ class MessageListView extends StatelessWidget {
     }
 
     final messageListView = stream_chat_flutter.MessageListView(
-      customAttachmentBuilders: customAttachmentBuilder,
+      parentMessageBuilder: customAttachmentBuilder,
     );
 
     if (channel != null) return messageListView;
