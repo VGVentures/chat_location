@@ -52,7 +52,7 @@ void main() {
       test('connects with the provided userId, token, and avatarUri', () {
         when(
           () => chatClient.connectUser(any(), any()),
-        ).thenAnswer((_) async => FakeOwnUser());
+        ).thenAnswer((_) async => FakeEvent());
 
         expect(
           chatRepository.connect(
@@ -79,7 +79,7 @@ void main() {
         final state = MockClientState();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.currentUser).thenReturn(null);
+        when(() => state.user).thenReturn(null);
 
         expect(
           () => chatRepository.getUserId(),
@@ -92,7 +92,7 @@ void main() {
         final user = MockOwnUser();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.currentUser).thenReturn(user);
+        when(() => state.user).thenReturn(user);
         when(() => user.id).thenReturn(userId);
 
         expect(
@@ -101,7 +101,7 @@ void main() {
         );
 
         verify(() => chatClient.state).called(1);
-        verify(() => state.currentUser).called(1);
+        verify(() => state.user).called(1);
         verify(() => user.id).called(1);
       });
     });
