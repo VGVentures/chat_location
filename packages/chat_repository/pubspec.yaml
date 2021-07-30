@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   location: ^4.3.0
-  stream_chat: 2.0.0-nullsafety.7
+  stream_chat_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
