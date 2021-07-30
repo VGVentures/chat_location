@@ -17,6 +17,12 @@ class FakeBuildContext extends Fake implements BuildContext {}
 
 class FakeMessage extends Fake implements stream_chat_flutter.Message {}
 
+class FakeMessageDetails extends Fake
+    implements stream_chat_flutter.MessageDetails {}
+
+class FakeMessageTheme extends Fake
+    implements stream_chat_flutter.MessageTheme {}
+
 void main() {
   group('MessageListView', () {
     late stream_chat_flutter.StreamChatClient client;
@@ -77,12 +83,22 @@ void main() {
       await tester.pumpAndSettle();
       final messageListViewFinder =
           find.byType(stream_chat_flutter.MessageListView);
-      // TODO: Fix Me
-      // tester
-      //     .widget<stream_chat_flutter.MessageListView>(messageListViewFinder)
-      //     .customAttachmentBuilders?['custom']
-      //     ?.call(FakeBuildContext(), FakeMessage(), []);
-      // expect(onGenerateAttachementsCallCount, equals(1));
+      (tester
+              .widget<stream_chat_flutter.MessageListView>(
+                  messageListViewFinder)
+              .messageBuilder
+              ?.call(
+                FakeBuildContext(),
+                FakeMessageDetails(),
+                [],
+                stream_chat_flutter.MessageWidget(
+                  message: FakeMessage(),
+                  messageTheme: FakeMessageTheme(),
+                ),
+              ) as stream_chat_flutter.MessageWidget)
+          .attachmentBuilders['custom']
+          ?.call(FakeBuildContext(), FakeMessage(), []);
+      expect(onGenerateAttachementsCallCount, equals(1));
     });
   });
 }
