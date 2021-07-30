@@ -1,7 +1,7 @@
 import 'package:chat_location/message_list/message_list.dart';
+import 'package:chat_location/message_location/message_location.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
-import 'package:chat_ui/chat_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,7 @@ class MessageListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChannelAppBar(channel: _channel),
+      appBar: chat_ui.ChannelAppBar(channel: _channel),
       body: BlocProvider(
         create: (context) => MessageListCubit(
           channel: _channel,
@@ -77,7 +77,19 @@ class _MessageListViewState extends State<MessageListView> {
       },
       child: Column(
         children: [
-          Expanded(child: chat_ui.MessageListView(channel: channel)),
+          Expanded(
+            child: chat_ui.MessageListView(
+              channel: channel,
+              onGenerateAttachments: {
+                'location': (context, message) {
+                  return MessageLocationPage(
+                    channel: channel,
+                    message: message,
+                  );
+                }
+              },
+            ),
+          ),
           chat_ui.MessageInput(
             controller: _controller,
             channel: channel,
@@ -99,6 +111,44 @@ class _MessageListViewState extends State<MessageListView> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AttachmentView extends StatelessWidget {
+  const AttachmentView({
+    Key? key,
+    required this.channel,
+    required this.message,
+  }) : super(key: key);
+
+  final Channel channel;
+  final Message message;
+
+  @override
+  Widget build(BuildContext context) {
+    final latitude = message.attachments.first.extraData['lat'] as double;
+    final longitude = message.attachments.first.extraData['long'] as double;
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MessageLocationPage(
+              channel: channel,
+              message: message,
+            ),
+          ),
+        );
+      },
+      child: chat_ui.wrapAttachmentWidget(
+        context,
+        MapThumbnailImage(
+          latitude: latitude,
+          longitude: longitude,
+        ),
+        const RoundedRectangleBorder(),
+        true,
       ),
     );
   }
