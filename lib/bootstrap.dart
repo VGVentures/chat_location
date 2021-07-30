@@ -9,10 +9,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
 import 'package:chat_location/app/app_bloc_observer.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
+import 'package:flutter/widgets.dart';
 
 typedef AppBuilder = FutureOr<Widget> Function(
   Widget Function(Widget) builder,

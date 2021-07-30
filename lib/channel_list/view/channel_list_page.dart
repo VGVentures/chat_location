@@ -1,10 +1,10 @@
+import 'package:chat_location/channel_list/channel_list.dart';
+import 'package:chat_location/l10n/l10n.dart';
+import 'package:chat_location/message_list/message_list.dart';
+import 'package:chat_repository/chat_repository.dart';
+import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chat_ui/chat_ui.dart' as chat_ui;
-import 'package:chat_location/l10n/l10n.dart';
-import 'package:chat_repository/chat_repository.dart';
-import 'package:chat_location/channel_list/channel_list.dart';
-import 'package:chat_location/message_list/message_list.dart';
 
 class ChannelListPage extends StatelessWidget {
   const ChannelListPage({Key? key}) : super(key: key);
