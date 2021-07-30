@@ -13,6 +13,16 @@ class MockChannel extends Mock implements stream_chat_flutter.Channel {}
 class MockChannelClientState extends Mock
     implements stream_chat_flutter.ChannelClientState {}
 
+class FakeBuildContext extends Fake implements BuildContext {}
+
+class FakeMessage extends Fake implements stream_chat_flutter.Message {}
+
+class FakeMessageDetails extends Fake
+    implements stream_chat_flutter.MessageDetails {}
+
+class FakeMessageTheme extends Fake
+    implements stream_chat_flutter.MessageTheme {}
+
 void main() {
   group('MessageListView', () {
     late stream_chat_flutter.StreamChatClient client;
@@ -50,6 +60,45 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(stream_chat_flutter.MessageListView), findsOneWidget);
+    });
+
+    testWidgets('supports custom attachment builders', (tester) async {
+      var onGenerateAttachementsCallCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: stream_chat_flutter.StreamChat(
+            client: client,
+            child: MessageListView(
+              channel: channel,
+              onGenerateAttachements: {
+                'custom': (context, attachment) {
+                  onGenerateAttachementsCallCount++;
+                  return const SizedBox();
+                },
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final messageListViewFinder =
+          find.byType(stream_chat_flutter.MessageListView);
+      (tester
+              .widget<stream_chat_flutter.MessageListView>(
+                  messageListViewFinder)
+              .messageBuilder
+              ?.call(
+                FakeBuildContext(),
+                FakeMessageDetails(),
+                [],
+                stream_chat_flutter.MessageWidget(
+                  message: FakeMessage(),
+                  messageTheme: FakeMessageTheme(),
+                ),
+              ) as stream_chat_flutter.MessageWidget)
+          .attachmentBuilders['custom']
+          ?.call(FakeBuildContext(), FakeMessage(), []);
+      expect(onGenerateAttachementsCallCount, equals(1));
     });
   });
 }

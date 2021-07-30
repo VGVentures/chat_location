@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:chat_repository/chat_repository.dart' hide Location;
+import 'package:location/location.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:stream_chat/stream_chat.dart';
+import 'package:stream_chat/stream_chat.dart' hide Location;
 import 'package:test/test.dart';
-import 'package:chat_repository/chat_repository.dart';
+
+class MockLocation extends Mock implements Location {}
 
 class MockStreamChatClient extends Mock implements StreamChatClient {}
 
@@ -16,10 +19,13 @@ class FakeEvent extends Fake implements Event {}
 
 class FakeUser extends Fake implements User {}
 
+class FakeOwnUser extends Fake implements OwnUser {}
+
 void main() {
   group('ChatRepository', () {
     late StreamChatClient chatClient;
     late ChatRepository chatRepository;
+    late Location location;
 
     setUpAll(() {
       registerFallbackValue(FakeUser());
@@ -27,7 +33,15 @@ void main() {
 
     setUp(() {
       chatClient = MockStreamChatClient();
-      chatRepository = ChatRepository(chatClient: chatClient);
+      location = MockLocation();
+      chatRepository = ChatRepository(
+        chatClient: chatClient,
+        location: location,
+      );
+    });
+
+    test('can be instantiated without any arguments', () {
+      expect(ChatRepository(), isNotNull);
     });
 
     group('connect', () {
@@ -38,7 +52,7 @@ void main() {
       test('connects with the provided userId, token, and avatarUri', () {
         when(
           () => chatClient.connectUser(any(), any()),
-        ).thenAnswer((_) async => FakeEvent());
+        ).thenAnswer((_) async => FakeOwnUser());
 
         expect(
           chatRepository.connect(
@@ -65,7 +79,7 @@ void main() {
         final state = MockClientState();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.user).thenReturn(null);
+        when(() => state.currentUser).thenReturn(null);
 
         expect(
           () => chatRepository.getUserId(),
@@ -78,7 +92,7 @@ void main() {
         final user = MockOwnUser();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.user).thenReturn(user);
+        when(() => state.currentUser).thenReturn(user);
         when(() => user.id).thenReturn(userId);
 
         expect(
@@ -87,7 +101,7 @@ void main() {
         );
 
         verify(() => chatClient.state).called(1);
-        verify(() => state.user).called(1);
+        verify(() => state.currentUser).called(1);
         verify(() => user.id).called(1);
       });
     });
@@ -108,6 +122,83 @@ void main() {
         verify(
           () => chatClient.watchChannel('messaging', channelId: channelId),
         ).called(1);
+      });
+    });
+
+    group('getCurrentLocation', () {
+      test('throws CurrentLocationFailure when service is not enabled', () {
+        when(() => location.serviceEnabled()).thenAnswer((_) async => false);
+        when(() => location.requestService()).thenAnswer((_) async => false);
+
+        expect(
+          () => chatRepository.getCurrentLocation(),
+          throwsA(isA<CurrentLocationFailure>()),
+        );
+      });
+
+      test('throws CurrentLocationFailure when permission is not granted', () {
+        when(() => location.serviceEnabled()).thenAnswer((_) async => true);
+        when(() => location.hasPermission()).thenAnswer(
+          (_) async => PermissionStatus.denied,
+        );
+        when(() => location.requestPermission()).thenAnswer(
+          (_) async => PermissionStatus.denied,
+        );
+
+        expect(
+          () => chatRepository.getCurrentLocation(),
+          throwsA(isA<CurrentLocationFailure>()),
+        );
+      });
+
+      test('throws CurrentLocationFailure when location is unavailable', () {
+        when(() => location.serviceEnabled()).thenAnswer((_) async => true);
+        when(() => location.hasPermission()).thenAnswer(
+          (_) async => PermissionStatus.granted,
+        );
+        when(() => location.getLocation()).thenThrow(Exception());
+
+        expect(
+          () => chatRepository.getCurrentLocation(),
+          throwsA(isA<CurrentLocationFailure>()),
+        );
+      });
+
+      test('throws CurrentLocationFailure when location is null', () {
+        when(() => location.serviceEnabled()).thenAnswer((_) async => true);
+        when(() => location.hasPermission()).thenAnswer(
+          (_) async => PermissionStatus.granted,
+        );
+        when(() => location.getLocation()).thenAnswer(
+          (_) async => LocationData.fromMap({}),
+        );
+
+        expect(
+          () => chatRepository.getCurrentLocation(),
+          throwsA(isA<CurrentLocationFailure>()),
+        );
+      });
+
+      test('returns CoordinatePair when location is available', () async {
+        const latitude = 42.0;
+        const longitude = 13.37;
+        when(() => location.serviceEnabled()).thenAnswer((_) async => true);
+        when(() => location.hasPermission()).thenAnswer(
+          (_) async => PermissionStatus.granted,
+        );
+        when(() => location.getLocation()).thenAnswer(
+          (_) async => LocationData.fromMap({
+            'latitude': latitude,
+            'longitude': longitude,
+          }),
+        );
+
+        expect(
+          await chatRepository.getCurrentLocation(),
+          isA<CoordinatePair>()
+              .having((c) => c.latitude, 'latitude', latitude)
+              .having((c) => c.longitude, 'longitude', longitude),
+        );
       });
     });
   });
