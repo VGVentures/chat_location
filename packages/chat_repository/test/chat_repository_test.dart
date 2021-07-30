@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:chat_repository/chat_repository.dart' hide Location;
 import 'package:location/location.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:stream_chat/stream_chat.dart' hide Location;
 import 'package:test/test.dart';
-import 'package:chat_repository/chat_repository.dart' hide Location;
 
 class MockLocation extends Mock implements Location {}
 
@@ -52,7 +52,7 @@ void main() {
       test('connects with the provided userId, token, and avatarUri', () {
         when(
           () => chatClient.connectUser(any(), any()),
-        ).thenAnswer((_) async => FakeEvent());
+        ).thenAnswer((_) async => FakeOwnUser());
 
         expect(
           chatRepository.connect(
@@ -79,7 +79,7 @@ void main() {
         final state = MockClientState();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.user).thenReturn(null);
+        when(() => state.currentUser).thenReturn(null);
 
         expect(
           () => chatRepository.getUserId(),
@@ -92,7 +92,7 @@ void main() {
         final user = MockOwnUser();
 
         when(() => chatClient.state).thenReturn(state);
-        when(() => state.user).thenReturn(user);
+        when(() => state.currentUser).thenReturn(user);
         when(() => user.id).thenReturn(userId);
 
         expect(
@@ -101,7 +101,7 @@ void main() {
         );
 
         verify(() => chatClient.state).called(1);
-        verify(() => state.user).called(1);
+        verify(() => state.currentUser).called(1);
         verify(() => user.id).called(1);
       });
     });

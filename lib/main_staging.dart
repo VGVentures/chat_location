@@ -5,8 +5,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:chat_location/bootstrap.dart';
 import 'package:chat_location/app/app.dart';
+import 'package:chat_location/bootstrap.dart';
 
 void main() {
   bootstrap(
