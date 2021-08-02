@@ -13,7 +13,7 @@ class MessageListCubit extends Cubit<MessageListState> {
 
   final ChatRepository _chatRepository;
 
-  void locationRequested() async {
+  Future<void> locationRequested() async {
     emit(
       state.copyWith(
         location: state.location.copyWith(

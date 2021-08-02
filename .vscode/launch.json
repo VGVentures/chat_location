@@ -9,12 +9,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main_development.dart",
-      "args": [
-        "--flavor",
-        "development",
-        "--target",
-        "lib/main_development.dart"
-      ]
+      "args": ["--flavor","development", "--target", "lib/main_development.dart"]
     },
     {
       "name": "Launch staging",

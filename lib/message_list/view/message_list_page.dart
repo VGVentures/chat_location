@@ -82,10 +82,7 @@ class _MessageListViewState extends State<MessageListView> {
               channel: channel,
               onGenerateAttachments: {
                 'location': (context, message) {
-                  return MessageLocationPage(
-                    channel: channel,
-                    message: message,
-                  );
+                  return AttachmentView(channel: channel, message: message);
                 }
               },
             ),
@@ -104,8 +101,8 @@ class _MessageListViewState extends State<MessageListView> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.location_history),
-                onPressed: () {
-                  context.read<MessageListCubit>().locationRequested();
+                onPressed: () async {
+                  await context.read<MessageListCubit>().locationRequested();
                 },
               ),
             ],
@@ -128,11 +125,12 @@ class AttachmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latitude = message.attachments.first.extraData['lat'] as double;
-    final longitude = message.attachments.first.extraData['long'] as double;
+    final latitude = message.attachments.first.extraData['lat'] ?? 0.0;
+    final longitude = message.attachments.first.extraData['long'] ?? 0.0;
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        await context.read<MessageListCubit>().locationRequested();
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MessageLocationPage(
               channel: channel,
@@ -141,14 +139,11 @@ class AttachmentView extends StatelessWidget {
           ),
         );
       },
-      child: chat_ui.wrapAttachmentWidget(
-        context,
-        MapThumbnailImage(
-          latitude: latitude,
-          longitude: longitude,
+      child: chat_ui.Attachment(
+        child: MapThumbnailImage(
+          latitude: latitude as double,
+          longitude: longitude as double,
         ),
-        const RoundedRectangleBorder(),
-        true,
       ),
     );
   }
