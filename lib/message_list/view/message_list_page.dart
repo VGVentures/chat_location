@@ -82,10 +82,7 @@ class _MessageListViewState extends State<MessageListView> {
               channel: channel,
               onGenerateAttachments: {
                 'location': (context, message) {
-                  return AttachmentView(
-                    channel: channel,
-                    message: message,
-                  );
+                  return AttachmentView(channel: channel, message: message);
                 }
               },
             ),
@@ -95,9 +92,12 @@ class _MessageListViewState extends State<MessageListView> {
             channel: channel,
             onGenerateAttachementThumbnails: {
               'location': (context, attachment) {
+                final latitude = attachment.extraData['latitude'] ?? 0.0;
+                final longitude = attachment.extraData['longitude'] ?? 0.0;
+
                 return MapThumbnailImage(
-                  latitude: attachment.extraData['latitude'] as double,
-                  longitude: attachment.extraData['longitude'] as double,
+                  latitude: latitude as double,
+                  longitude: longitude as double,
                 );
               },
             },
@@ -128,16 +128,13 @@ class AttachmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latitude = message.attachments.first.extraData['lat'] ?? 0.0;
-    final longitude = message.attachments.first.extraData['long'] ?? 0.0;
+    final latitude = message.attachments.first.extraData['latitude'] ?? 0.0;
+    final longitude = message.attachments.first.extraData['longitude'] ?? 0.0;
     return InkWell(
       onTap: () async {
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => MessageLocationPage(
-              channel: channel,
-              message: message,
-            ),
+            builder: (context) => MessageLocationPage(message: message),
           ),
         );
       },
