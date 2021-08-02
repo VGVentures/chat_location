@@ -82,7 +82,10 @@ class _MessageListViewState extends State<MessageListView> {
               channel: channel,
               onGenerateAttachments: {
                 'location': (context, message) {
-                  return AttachmentView(channel: channel, message: message);
+                  return AttachmentView(
+                    channel: channel,
+                    message: message,
+                  );
                 }
               },
             ),
@@ -129,7 +132,6 @@ class AttachmentView extends StatelessWidget {
     final longitude = message.attachments.first.extraData['long'] ?? 0.0;
     return InkWell(
       onTap: () async {
-        await context.read<MessageListCubit>().locationRequested();
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MessageLocationPage(

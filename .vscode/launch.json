@@ -9,7 +9,16 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main_development.dart",
-      "args": ["--flavor","development", "--target", "lib/main_development.dart"]
+      "args": [
+        "--flavor",
+        "development", 
+        "--target", 
+        "lib/main_development.dart",
+        "--dart-define",
+        "CHAT_API_KEY=2mgh87dnp9ya",
+        "--dart-define",
+        "CHAT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibmVldmFzaCJ9.Bg3rd4Cs66UUOZBaF9yU4fRHAsXd0rg8VYy7Z_ZR-rA",
+      ]
     },
     {
       "name": "Launch staging",
