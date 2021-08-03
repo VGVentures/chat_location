@@ -1,7 +1,5 @@
-import 'package:chat_location/message_location/message_location.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MessageLocationPage extends StatefulWidget {
@@ -25,7 +23,6 @@ class _MessageLocationPageState extends State<MessageLocationPage> {
         widget.message.attachments.first.extraData['latitude'] ?? 0.0;
     final longitude =
         widget.message.attachments.first.extraData['longitude'] ?? 0.0;
-
     final position = LatLng(latitude as double, longitude as double);
     return Scaffold(
       appBar: AppBar(
@@ -54,14 +51,15 @@ class _MessageLocationPageState extends State<MessageLocationPage> {
               Marker(
                 markerId: const MarkerId('user-location-marker-id'),
                 position: position,
-              )
+              ),
             },
           ),
         ),
         secondChild: Center(
           child: Icon(
             Icons.location_history,
-            color: Colors.red.withOpacity(0.76),
+            size: 30,
+            color: Colors.red.withOpacity(0.7),
           ),
         ),
       ),
