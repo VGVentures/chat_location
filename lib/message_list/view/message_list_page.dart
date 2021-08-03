@@ -69,7 +69,7 @@ class _MessageListViewState extends State<MessageListView> {
               uploadState: const UploadState.success(),
               extraData: {
                 'latitude': state.location.latitude,
-                'longitude': state.location.longtitude,
+                'longitude': state.location.longitude,
               },
             ),
           );
@@ -81,9 +81,7 @@ class _MessageListViewState extends State<MessageListView> {
             child: chat_ui.MessageListView(
               channel: channel,
               onGenerateAttachments: {
-                'location': (context, message) {
-                  return AttachmentView(channel: channel, message: message);
-                }
+                'location': (_, message) => AttachmentView(message: message)
               },
             ),
           ),
@@ -94,7 +92,6 @@ class _MessageListViewState extends State<MessageListView> {
               'location': (context, attachment) {
                 final latitude = attachment.extraData['latitude'] ?? 0.0;
                 final longitude = attachment.extraData['longitude'] ?? 0.0;
-
                 return MapThumbnailImage(
                   latitude: latitude as double,
                   longitude: longitude as double,
@@ -117,13 +114,8 @@ class _MessageListViewState extends State<MessageListView> {
 }
 
 class AttachmentView extends StatelessWidget {
-  const AttachmentView({
-    Key? key,
-    required this.channel,
-    required this.message,
-  }) : super(key: key);
+  const AttachmentView({Key? key, required this.message}) : super(key: key);
 
-  final Channel channel;
   final Message message;
 
   @override
@@ -133,9 +125,7 @@ class AttachmentView extends StatelessWidget {
     return InkWell(
       onTap: () async {
         await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MessageLocationPage(message: message),
-          ),
+          MessageLocationPage.route(message: message),
         );
       },
       child: chat_ui.Attachment(

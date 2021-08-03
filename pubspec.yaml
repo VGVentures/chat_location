@@ -20,6 +20,7 @@ dependencies:
   flutter_bloc: ^7.0.0
   google_maps_flutter: ^2.0.6
   intl: ^0.17.0
+  mockingjay: ^0.1.0
 
 dev_dependencies:
   flutter_test:

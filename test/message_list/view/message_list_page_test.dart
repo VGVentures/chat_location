@@ -5,6 +5,7 @@ import 'package:chat_ui/chat_ui.dart' as chat_ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -13,6 +14,10 @@ class MockChannel extends Mock implements Channel {}
 
 class MockChannelClientState extends Mock implements ChannelClientState {}
 
+class MockStreamChatClient extends Mock implements StreamChatClient {}
+
+class MockMessage extends Mock implements Message {}
+
 class MockMessageListCubit extends MockCubit<MessageListState>
     implements MessageListCubit {}
 
@@ -20,16 +25,20 @@ class FakeMessageListState extends Fake implements MessageListState {}
 
 void main() {
   late Channel channel;
+  late ChannelClientState channelClientState;
+  late StreamChatClient streamChatClient;
 
   setUp(() {
     channel = MockChannel();
+    channelClientState = MockChannelClientState();
+    streamChatClient = MockStreamChatClient();
 
-    final channelClientState = MockChannelClientState();
     when(() => channel.initialized).thenAnswer((_) async => true);
     when(() => channel.on(any(), any(), any(), any())).thenAnswer(
       (_) => const Stream.empty(),
     );
     when(() => channel.state).thenReturn(channelClientState);
+    when(() => channel.client).thenReturn(streamChatClient);
     when(() => channelClientState.threadsStream).thenAnswer(
       (_) => const Stream.empty(),
     );
@@ -55,6 +64,7 @@ void main() {
     setUpAll(() {
       registerFallbackValue<MessageListState>(FakeMessageListState());
     });
+
     testWidgets('renders a chat_ui.MessageListView', (tester) async {
       final MessageListCubit mockMessageListCubit = MockMessageListCubit();
       when(() => mockMessageListCubit.state)
@@ -111,6 +121,7 @@ void main() {
       final MessageListCubit mockMessageListCubit = MockMessageListCubit();
       when(() => mockMessageListCubit.state)
           .thenReturn(MessageListState(channel: channel));
+      when(mockMessageListCubit.locationRequested).thenAnswer((_) async {});
       await tester.pumpApp(
         BlocProvider.value(
           value: mockMessageListCubit,
@@ -134,7 +145,7 @@ void main() {
             channel: channel,
             location: const CurrentLocation(
               latitude: 0,
-              longtitude: 0,
+              longitude: 0,
               status: CurrentLocationStatus.unavailable,
             ),
           ),
@@ -162,7 +173,7 @@ void main() {
             channel: channel,
             location: const CurrentLocation(
               latitude: 0,
-              longtitude: 0,
+              longitude: 0,
               status: CurrentLocationStatus.available,
             ),
           ),
@@ -178,6 +189,81 @@ void main() {
       await tester.pump();
       await tester.takeException();
       expect(find.byType(MapThumbnailImage), findsOneWidget);
+    });
+
+    testWidgets('renders attachment view ', (tester) async {
+      final MessageListCubit mockMessageListCubit = MockMessageListCubit();
+      when(() => mockMessageListCubit.state)
+          .thenReturn(MessageListState(channel: channel));
+
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: mockMessageListCubit,
+          child: chat_ui.MessageListView(
+            channel: channel,
+            onGenerateAttachments: {
+              'location': (_, message) => AttachmentView(message: message),
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.takeException();
+
+      expect(find.byType(chat_ui.MessageListView), findsOneWidget);
+    });
+
+    testWidgets(
+        'renders attachment with map thumbnail image '
+        'when given channel and message', (tester) async {
+      final message = MockMessage();
+
+      when(() => message.attachments).thenReturn([
+        Attachment(
+          type: 'location',
+          uploadState: const UploadState.success(),
+          extraData: const {'latitude': 42.0, 'longitude': 42.0},
+        ),
+      ]);
+
+      await tester.pumpApp(
+        Scaffold(body: AttachmentView(message: message)),
+      );
+      await tester.ensureVisible(find.byType(AttachmentView));
+      await tester.pumpAndSettle();
+      expect(find.byType(chat_ui.Attachment), findsOneWidget);
+      expect(find.byType(MapThumbnailImage), findsOneWidget);
+    });
+
+    testWidgets(
+        'navigates to MessageLocationPage '
+        'when pressing Attachment', (tester) async {
+      final navigator = MockNavigator();
+      final message = MockMessage();
+      final attachments = [
+        Attachment(
+          type: 'location',
+          uploadState: const UploadState.success(),
+          extraData: const {'latitude': 42.0, 'longitude': 42.0},
+        ),
+      ];
+
+      when(() => navigator.push(any())).thenAnswer((_) async {});
+      when(() => message.attachments).thenReturn(attachments);
+
+      await tester.pumpApp(
+        MockNavigatorProvider(
+          navigator: navigator,
+          child: Scaffold(
+            body: AttachmentView(message: message),
+          ),
+        ),
+      );
+      await tester.ensureVisible(find.byType(AttachmentView));
+      await tester.tap(find.byType(InkWell));
+      await tester.pumpAndSettle();
+
+      verify(() => navigator.push(any(that: isRoute()))).called(1);
     });
   });
 }
