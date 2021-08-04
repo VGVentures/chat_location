@@ -1,6 +1,6 @@
 import 'package:chat_location/message_location/message_location.dart';
 import 'package:chat_repository/chat_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,6 +12,8 @@ class MockMessage extends Mock implements Message {}
 class MockUser extends Mock implements User {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late List<Attachment> attachments;
   late Message message;
   late User user;
@@ -29,13 +31,6 @@ void main() {
   });
 
   group('MessageLocationPage', () {
-    test('has route', () {
-      expect(
-        MessageLocationPage.route(message: MockMessage()),
-        isA<MaterialPageRoute<void>>(),
-      );
-    });
-
     testWidgets('renders a MessageListView', (tester) async {
       when(() => user.name).thenReturn('John');
       when(() => message.user).thenReturn(user);

@@ -263,7 +263,7 @@ void main() {
       await tester.tap(find.byType(InkWell));
       await tester.pumpAndSettle();
 
-      verify(() => navigator.push(any(that: isRoute()))).called(1);
+      verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
     });
   });
 }
