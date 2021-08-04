@@ -1,6 +1,5 @@
 import 'package:chat_location/message_location/message_location.dart';
 import 'package:chat_repository/chat_repository.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';

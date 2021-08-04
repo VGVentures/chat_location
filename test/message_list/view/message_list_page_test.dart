@@ -14,8 +14,6 @@ class MockChannel extends Mock implements Channel {}
 
 class MockChannelClientState extends Mock implements ChannelClientState {}
 
-class MockStreamChatClient extends Mock implements StreamChatClient {}
-
 class MockMessage extends Mock implements Message {}
 
 class MockMessageListCubit extends MockCubit<MessageListState>
@@ -26,19 +24,16 @@ class FakeMessageListState extends Fake implements MessageListState {}
 void main() {
   late Channel channel;
   late ChannelClientState channelClientState;
-  late StreamChatClient streamChatClient;
 
   setUp(() {
     channel = MockChannel();
     channelClientState = MockChannelClientState();
-    streamChatClient = MockStreamChatClient();
 
     when(() => channel.initialized).thenAnswer((_) async => true);
     when(() => channel.on(any(), any(), any(), any())).thenAnswer(
       (_) => const Stream.empty(),
     );
     when(() => channel.state).thenReturn(channelClientState);
-    when(() => channel.client).thenReturn(streamChatClient);
     when(() => channelClientState.threadsStream).thenAnswer(
       (_) => const Stream.empty(),
     );
