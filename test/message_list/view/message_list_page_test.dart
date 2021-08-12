@@ -21,7 +21,14 @@ class MockMessageListCubit extends MockCubit<MessageListState>
 
 class FakeMessageListState extends Fake implements MessageListState {}
 
+class FakeBindings extends AutomatedTestWidgetsFlutterBinding {
+  @override
+  bool get overrideHttpClient => false;
+}
+
 void main() {
+  FakeBindings();
+
   late Channel channel;
   late ChannelClientState channelClientState;
 
