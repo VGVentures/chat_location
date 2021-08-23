@@ -14,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class FakeStreamChatClient extends Fake implements StreamChatClient {
   @override
@@ -30,23 +29,21 @@ class MockChatRepository extends Mock implements ChatRepository {}
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(Widget widget, {ChatRepository? chatRepository}) async {
-    await mockNetworkImages(() async {
-      await pumpWidget(
-        RepositoryProvider.value(
-          value: chatRepository ?? MockChatRepository(),
-          child: MaterialApp(
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: chat_ui.StreamChat(
-              client: FakeStreamChatClient(),
-              child: widget,
-            ),
+    await pumpWidget(
+      RepositoryProvider.value(
+        value: chatRepository ?? MockChatRepository(),
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: chat_ui.StreamChat(
+            client: FakeStreamChatClient(),
+            child: widget,
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }

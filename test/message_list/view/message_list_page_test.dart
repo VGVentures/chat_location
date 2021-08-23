@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -21,14 +22,7 @@ class MockMessageListCubit extends MockCubit<MessageListState>
 
 class FakeMessageListState extends Fake implements MessageListState {}
 
-class FakeBindings extends AutomatedTestWidgetsFlutterBinding {
-  @override
-  bool get overrideHttpClient => false;
-}
-
 void main() {
-  FakeBindings();
-
   late Channel channel;
   late ChannelClientState channelClientState;
 
@@ -78,7 +72,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.takeException();
 
       expect(find.byType(chat_ui.MessageListView), findsOneWidget);
     });
@@ -94,7 +87,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.takeException();
 
       expect(find.byType(chat_ui.MessageInput), findsOneWidget);
     });
@@ -110,7 +102,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.takeException();
 
       expect(
         find.widgetWithIcon(IconButton, Icons.location_history),
@@ -132,7 +123,6 @@ void main() {
       );
       await tester.tap(find.widgetWithIcon(IconButton, Icons.location_history));
       await tester.pumpAndSettle();
-      await tester.takeException();
       verify(mockMessageListCubit.locationRequested).called(1);
     });
 
@@ -182,15 +172,17 @@ void main() {
         ]),
         initialState: MessageListState(channel: channel),
       );
-      await tester.pumpApp(
-        BlocProvider.value(
-          value: mockMessageListCubit,
-          child: const Scaffold(body: MessageListView()),
-        ),
-      );
-      await tester.pump();
-      await tester.takeException();
-      expect(find.byType(MapThumbnailImage), findsOneWidget);
+
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          BlocProvider.value(
+            value: mockMessageListCubit,
+            child: const Scaffold(body: MessageListView()),
+          ),
+        );
+        await tester.pump();
+        expect(find.byType(MapThumbnailImage), findsOneWidget);
+      });
     });
 
     testWidgets('renders attachment view ', (tester) async {
@@ -210,8 +202,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.takeException();
-
       expect(find.byType(chat_ui.MessageListView), findsOneWidget);
     });
 
@@ -231,6 +221,7 @@ void main() {
       await tester.pumpApp(
         Scaffold(body: AttachmentView(message: message)),
       );
+
       await tester.ensureVisible(find.byType(AttachmentView));
       await tester.pumpAndSettle();
       expect(find.byType(chat_ui.Attachment), findsOneWidget);
