@@ -21,7 +21,12 @@ class FakeMessageDetails extends Fake
     implements stream_chat_flutter.MessageDetails {}
 
 class FakeMessageTheme extends Fake
-    implements stream_chat_flutter.MessageTheme {}
+    implements stream_chat_flutter.MessageThemeData {
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return super.toString();
+  }
+}
 
 void main() {
   group('MessageListView', () {
