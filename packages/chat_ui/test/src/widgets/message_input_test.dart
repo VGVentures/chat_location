@@ -97,7 +97,6 @@ void main() {
       controller.addAttachment(stream_chat_flutter.Attachment(
         type: 'custom',
         uploadState: const stream_chat_flutter.UploadState.success(),
-        extraData: const {},
       ));
       await tester.pumpAndSettle();
       tester.takeException();

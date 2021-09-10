@@ -95,8 +95,8 @@ void main() {
                   message: FakeMessage(),
                   messageTheme: FakeMessageTheme(),
                 ),
-              ) as stream_chat_flutter.MessageWidget)
-          .attachmentBuilders['custom']
+              ) as stream_chat_flutter.MessageWidget?)
+          ?.attachmentBuilders['custom']
           ?.call(FakeBuildContext(), FakeMessage(), []);
       expect(onGenerateAttachementsCallCount, equals(1));
     });
