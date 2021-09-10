@@ -133,8 +133,6 @@ void main() {
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
-              latitude: 0,
-              longtitude: 0,
               status: CurrentLocationStatus.unavailable,
             ),
           ),
@@ -161,8 +159,6 @@ void main() {
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
-              latitude: 0,
-              longtitude: 0,
               status: CurrentLocationStatus.available,
             ),
           ),
