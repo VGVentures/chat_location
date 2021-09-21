@@ -9,7 +9,11 @@ dependencies:
   flutter:
     sdk: flutter
   location: ^4.3.0
-  stream_chat_flutter: ^2.0.0
+  stream_chat_flutter: 
+    git:
+      url: https://github.com/GetStream/stream-chat-flutter
+      path: packages/stream_chat_flutter
+      ref: develop
 
 dev_dependencies:
   flutter_test:
