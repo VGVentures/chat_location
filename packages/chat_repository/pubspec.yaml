@@ -18,8 +18,18 @@ dev_dependencies:
   very_good_analysis: ^2.3.0
 
 dependency_overrides:
+  stream_chat:
+    git:
+      url: https://github.com/GetStream/stream-chat-flutter
+      path: packages/stream_chat
+      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5
   stream_chat_flutter:
     git:
       url: https://github.com/GetStream/stream-chat-flutter
       path: packages/stream_chat_flutter
-      ref: develop
+      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5
+  stream_chat_flutter_core:
+    git:
+      url: https://github.com/GetStream/stream-chat-flutter
+      path: packages/stream_chat_flutter_core
+      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5

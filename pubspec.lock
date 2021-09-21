@@ -888,25 +888,31 @@ packages:
     source: hosted
     version: "2.1.0"
   stream_chat:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/stream_chat"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
     version: "2.2.1"
   stream_chat_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/stream_chat_flutter"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
     version: "2.2.1"
   stream_chat_flutter_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/stream_chat_flutter_core"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
     version: "2.2.1"
   string_scanner:
     dependency: transitive
