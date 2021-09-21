@@ -18,6 +18,8 @@ void main() {
       client = MockStreamChatClient();
       when(() => client.on(any(), any(), any(), any()))
           .thenAnswer((_) => const Stream.empty());
+      when(() => client.wsConnectionStatus)
+          .thenReturn(stream_chat_flutter.ConnectionStatus.connected);
     });
 
     testWidgets('renders ChannelListView with correct configuration',

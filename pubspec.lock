@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "22.0.0"
+    version: "25.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.1"
+    version: "2.2.0"
   archive:
     dependency: transitive
     description:
@@ -42,7 +42,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "2.8.1"
   bloc:
     dependency: "direct main"
     description:
@@ -98,7 +98,7 @@ packages:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.1"
   chat_repository:
     dependency: "direct main"
     description:
@@ -385,6 +385,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.2"
+  frontend_server_client:
+    dependency: transitive
+    description:
+      name: frontend_server_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   glob:
     dependency: transitive
     description:
@@ -538,7 +545,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.7.0"
   mime:
     dependency: transitive
     description:
@@ -881,26 +888,32 @@ packages:
     source: hosted
     version: "2.1.0"
   stream_chat:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
+      path: "packages/stream_chat"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
+    version: "2.2.1"
   stream_chat_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.2"
+      path: "packages/stream_chat_flutter"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
+    version: "2.2.1"
   stream_chat_flutter_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: stream_chat_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
+      path: "packages/stream_chat_flutter_core"
+      ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      resolved-ref: "6f677de5287646a802b8b809a3ee0592d355d4b5"
+      url: "https://github.com/GetStream/stream-chat-flutter"
+    source: git
+    version: "2.2.1"
   string_scanner:
     dependency: transitive
     description:
@@ -935,21 +948,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.16.8"
+    version: "1.17.10"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.2"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.19"
+    version: "0.4.0"
   typed_data:
     dependency: transitive
     description:
@@ -1019,7 +1032,7 @@ packages:
       name: very_good_analysis
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   video_compress:
     dependency: transitive
     description:
