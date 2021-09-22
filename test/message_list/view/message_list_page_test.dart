@@ -189,17 +189,19 @@ void main() {
       when(() => mockMessageListCubit.state)
           .thenReturn(MessageListState(channel: channel));
 
-      await tester.pumpApp(
-        BlocProvider.value(
-          value: mockMessageListCubit,
-          child: chat_ui.MessageListView(
-            channel: channel,
-            onGenerateAttachments: {
-              'location': (_, message) => AttachmentView(message: message),
-            },
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          BlocProvider.value(
+            value: mockMessageListCubit,
+            child: chat_ui.MessageListView(
+              channel: channel,
+              onGenerateAttachments: {
+                'location': (_, message) => AttachmentView(message: message),
+              },
+            ),
           ),
-        ),
-      );
+        );
+      });
       await tester.pumpAndSettle();
       expect(find.byType(chat_ui.MessageListView), findsOneWidget);
     });
@@ -243,14 +245,16 @@ void main() {
       when(() => navigator.push(any())).thenAnswer((_) async {});
       when(() => message.attachments).thenReturn(attachments);
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: Scaffold(
-            body: AttachmentView(message: message),
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: Scaffold(
+              body: AttachmentView(message: message),
+            ),
           ),
-        ),
-      );
+        );
+      });
       await tester.ensureVisible(find.byType(AttachmentView));
       await tester.tap(find.byType(InkWell));
       await tester.pumpAndSettle();

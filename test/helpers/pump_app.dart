@@ -23,6 +23,13 @@ class FakeStreamChatClient extends Fake implements StreamChatClient {
     String? eventType3,
     String? eventType4,
   ]) async* {}
+
+  @override
+  ConnectionStatus get wsConnectionStatus => ConnectionStatus.connected;
+
+  @override
+  Stream<ConnectionStatus> get wsConnectionStatusStream =>
+      Stream.value(ConnectionStatus.connected);
 }
 
 class MockChatRepository extends Mock implements ChatRepository {}
