@@ -15,6 +15,10 @@ class MockChannel extends Mock implements Channel {}
 
 class MockChannelClientState extends Mock implements ChannelClientState {}
 
+class MockStreamChatClient extends Mock implements StreamChatClient {}
+
+class MockClientState extends Mock implements ClientState {}
+
 class MockMessage extends Mock implements Message {}
 
 class MockMessageListCubit extends MockCubit<MessageListState>
@@ -27,24 +31,40 @@ class FakePageRoute extends Fake implements PageRoute<dynamic> {}
 void main() {
   late Channel channel;
   late ChannelClientState channelClientState;
+  late StreamChatClient client;
+  late ClientState clientState;
 
   setUp(() {
     channel = MockChannel();
     channelClientState = MockChannelClientState();
+    client = MockStreamChatClient();
+    clientState = MockClientState();
 
     when(() => channel.initialized).thenAnswer((_) async => true);
-    when(() => channel.on(any(), any(), any(), any())).thenAnswer(
-      (_) => const Stream.empty(),
-    );
+    when(() => channel.on(any(), any(), any(), any()))
+        .thenAnswer((_) => const Stream.empty());
+    when(() => channel.nameStream).thenAnswer((_) => Stream.value('channel'));
+    when(() => channel.imageStream).thenAnswer((_) => Stream.value(null));
     when(() => channel.state).thenReturn(channelClientState);
-    when(() => channelClientState.threadsStream).thenAnswer(
-      (_) => const Stream.empty(),
-    );
-    when(() => channelClientState.messagesStream).thenAnswer(
-      (_) => const Stream.empty(),
-    );
+
+    when(() => channelClientState.threadsStream)
+        .thenAnswer((_) => const Stream.empty());
+    when(() => channelClientState.messagesStream)
+        .thenAnswer((_) => const Stream.empty());
     when(() => channelClientState.messages).thenReturn([]);
     when(() => channelClientState.isUpToDate).thenReturn(true);
+    when(() => channelClientState.members).thenReturn([]);
+    when(() => channelClientState.membersStream)
+        .thenAnswer((_) => Stream.value([]));
+    when(() => channelClientState.unreadCount).thenReturn(0);
+    when(() => channelClientState.unreadCountStream)
+        .thenAnswer((_) => Stream.value(0));
+
+    when(() => clientState.totalUnreadCount).thenReturn(0);
+    when(() => clientState.totalUnreadCountStream)
+        .thenAnswer((_) => Stream.value(0));
+    when(() => channel.client).thenReturn(client);
+    when(() => client.state).thenReturn(clientState);
   });
 
   group('MessageListPage', () {
@@ -53,7 +73,7 @@ void main() {
         MessageListPage(channel: channel),
       );
       await tester.pumpAndSettle();
-      await tester.takeException();
+      // await tester.takeException();
       expect(find.byType(MessageListView), findsOneWidget);
     });
   });
