@@ -22,6 +22,8 @@ class MockMessageListCubit extends MockCubit<MessageListState>
 
 class FakeMessageListState extends Fake implements MessageListState {}
 
+class FakePageRoute extends Fake implements PageRoute<dynamic> {}
+
 void main() {
   late Channel channel;
   late ChannelClientState channelClientState;
@@ -59,6 +61,7 @@ void main() {
   group('MessageListView', () {
     setUpAll(() {
       registerFallbackValue<MessageListState>(FakeMessageListState());
+      registerFallbackValue<PageRoute<dynamic>>(FakePageRoute());
     });
 
     testWidgets('renders a chat_ui.MessageListView', (tester) async {
@@ -136,8 +139,6 @@ void main() {
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
-              latitude: 0,
-              longitude: 0,
               status: CurrentLocationStatus.unavailable,
             ),
           ),
@@ -164,8 +165,6 @@ void main() {
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
-              latitude: 0,
-              longitude: 0,
               status: CurrentLocationStatus.available,
             ),
           ),

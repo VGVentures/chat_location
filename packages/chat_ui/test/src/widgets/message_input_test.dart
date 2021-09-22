@@ -22,6 +22,8 @@ void main() {
       client = MockStreamChatClient();
       when(() => client.on(any(), any(), any(), any()))
           .thenAnswer((_) => const Stream.empty());
+      when(() => client.wsConnectionStatus)
+          .thenReturn(stream_chat_flutter.ConnectionStatus.connected);
       channel = MockChannel();
       when(() => channel.initialized).thenAnswer((_) async => true);
       when(() => channel.on(any(), any(), any(), any())).thenAnswer(
@@ -97,7 +99,6 @@ void main() {
       controller.addAttachment(stream_chat_flutter.Attachment(
         type: 'custom',
         uploadState: const stream_chat_flutter.UploadState.success(),
-        extraData: const {},
       ));
       await tester.pumpAndSettle();
       tester.takeException();

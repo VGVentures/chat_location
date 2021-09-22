@@ -1,4 +1,5 @@
 import 'package:chat_ui/chat_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -21,7 +22,12 @@ class FakeMessageDetails extends Fake
     implements stream_chat_flutter.MessageDetails {}
 
 class FakeMessageTheme extends Fake
-    implements stream_chat_flutter.MessageTheme {}
+    implements stream_chat_flutter.MessageThemeData {
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return super.toString();
+  }
+}
 
 void main() {
   group('MessageListView', () {
@@ -32,6 +38,8 @@ void main() {
       client = MockStreamChatClient();
       when(() => client.on(any(), any(), any(), any()))
           .thenAnswer((_) => const Stream.empty());
+      when(() => client.wsConnectionStatus)
+          .thenReturn(stream_chat_flutter.ConnectionStatus.connected);
       channel = MockChannel();
       when(() => channel.initialized).thenAnswer((_) async => true);
       when(() => channel.on(any(), any(), any(), any())).thenAnswer(
@@ -95,8 +103,8 @@ void main() {
                   message: FakeMessage(),
                   messageTheme: FakeMessageTheme(),
                 ),
-              ) as stream_chat_flutter.MessageWidget)
-          .attachmentBuilders['custom']
+              ) as stream_chat_flutter.MessageWidget?)
+          ?.attachmentBuilders['custom']
           ?.call(FakeBuildContext(), FakeMessage(), []);
       expect(onGenerateAttachementsCallCount, equals(1));
     });

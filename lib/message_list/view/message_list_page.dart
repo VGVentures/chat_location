@@ -90,11 +90,9 @@ class _MessageListViewState extends State<MessageListView> {
             channel: channel,
             onGenerateAttachementThumbnails: {
               'location': (context, attachment) {
-                final latitude = attachment.extraData['latitude'] ?? 0.0;
-                final longitude = attachment.extraData['longitude'] ?? 0.0;
                 return MapThumbnailImage(
-                  latitude: latitude as double,
-                  longitude: longitude as double,
+                  latitude: attachment.extraData['latitude'] as double?,
+                  longitude: attachment.extraData['longitude'] as double?,
                 );
               },
             },
@@ -143,12 +141,12 @@ class AttachmentView extends StatelessWidget {
 class MapThumbnailImage extends StatelessWidget {
   const MapThumbnailImage({
     Key? key,
-    required this.latitude,
-    required this.longitude,
+    this.latitude = 0,
+    this.longitude = 0,
   }) : super(key: key);
 
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
 
   Uri get _thumbnailUri {
     return Uri(
@@ -156,7 +154,7 @@ class MapThumbnailImage extends StatelessWidget {
       host: 'maps.googleapis.com',
       port: 443,
       path: '/maps/api/staticmap',
-      queryParameters: {
+      queryParameters: <String, String>{
         'center': '$latitude,$longitude',
         'zoom': '18',
         'size': '700x500',
@@ -171,8 +169,8 @@ class MapThumbnailImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       '$_thumbnailUri',
-      height: 300.0,
-      width: 600.0,
+      height: 300,
+      width: 600,
       fit: BoxFit.fill,
     );
   }
