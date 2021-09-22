@@ -30,6 +30,9 @@ class FakeStreamChatClient extends Fake implements StreamChatClient {
   @override
   Stream<ConnectionStatus> get wsConnectionStatusStream =>
       Stream.value(ConnectionStatus.connected);
+
+  @override
+  void closeConnection() {}
 }
 
 class MockChatRepository extends Mock implements ChatRepository {}
