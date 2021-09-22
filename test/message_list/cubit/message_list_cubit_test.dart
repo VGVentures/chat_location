@@ -52,18 +52,13 @@ void main() {
         },
         act: (cubit) => cubit.locationRequested(),
         expect: () => [
-          MessageListState(
-            channel: channel,
-            location: const CurrentLocation(
-              status: CurrentLocationStatus.pending,
-            ),
-          ),
+          MessageListState(channel: channel),
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
               status: CurrentLocationStatus.unavailable,
             ),
-          )
+          ),
         ],
       );
 
@@ -80,12 +75,7 @@ void main() {
         },
         act: (cubit) => cubit.locationRequested(),
         expect: () => [
-          MessageListState(
-            channel: channel,
-            location: const CurrentLocation(
-              status: CurrentLocationStatus.pending,
-            ),
-          ),
+          MessageListState(channel: channel),
           MessageListState(
             channel: channel,
             location: const CurrentLocation(
@@ -93,7 +83,7 @@ void main() {
               longtitude: longitude,
               status: CurrentLocationStatus.available,
             ),
-          )
+          ),
         ],
       );
     });

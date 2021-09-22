@@ -170,7 +170,7 @@ void main() {
           (_) async => PermissionStatus.granted,
         );
         when(() => location.getLocation()).thenAnswer(
-          (_) async => LocationData.fromMap({}),
+          (_) async => LocationData.fromMap(<String, dynamic>{}),
         );
 
         expect(
@@ -187,10 +187,12 @@ void main() {
           (_) async => PermissionStatus.granted,
         );
         when(() => location.getLocation()).thenAnswer(
-          (_) async => LocationData.fromMap({
-            'latitude': latitude,
-            'longitude': longitude,
-          }),
+          (_) async => LocationData.fromMap(
+            <String, dynamic>{
+              'latitude': latitude,
+              'longitude': longitude,
+            },
+          ),
         );
 
         expect(
