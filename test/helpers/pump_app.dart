@@ -38,7 +38,11 @@ class FakeStreamChatClient extends Fake implements StreamChatClient {
 class MockChatRepository extends Mock implements ChatRepository {}
 
 extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget, {ChatRepository? chatRepository}) async {
+  Future<void> pumpApp(
+    Widget widget, {
+    ChatRepository? chatRepository,
+    StreamChatClient? streamChatClient,
+  }) async {
     await pumpWidget(
       RepositoryProvider.value(
         value: chatRepository ?? MockChatRepository(),
@@ -49,7 +53,7 @@ extension PumpApp on WidgetTester {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: chat_ui.StreamChat(
-            client: FakeStreamChatClient(),
+            client: streamChatClient ?? FakeStreamChatClient(),
             child: widget,
           ),
         ),

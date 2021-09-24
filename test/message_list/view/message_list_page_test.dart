@@ -28,6 +28,17 @@ class FakeMessageListState extends Fake implements MessageListState {}
 
 class FakePageRoute extends Fake implements PageRoute<dynamic> {}
 
+class FakeOwnUser extends Fake implements OwnUser {
+  @override
+  String get id => 'user-id';
+
+  @override
+  String? get image => 'user-image';
+
+  @override
+  bool get online => true;
+}
+
 void main() {
   late Channel channel;
   late ChannelClientState channelClientState;
@@ -59,21 +70,31 @@ void main() {
     when(() => channelClientState.unreadCount).thenReturn(0);
     when(() => channelClientState.unreadCountStream)
         .thenAnswer((_) => Stream.value(0));
+    when(() => channelClientState.typingEvents).thenReturn({});
+    when(() => channelClientState.typingEventsStream)
+        .thenAnswer((_) => Stream.value({}));
 
     when(() => clientState.totalUnreadCount).thenReturn(0);
     when(() => clientState.totalUnreadCountStream)
         .thenAnswer((_) => Stream.value(0));
+    when(() => clientState.currentUser).thenReturn(FakeOwnUser());
+    when(() => clientState.currentUserStream)
+        .thenAnswer((_) => Stream.value(FakeOwnUser()));
     when(() => channel.client).thenReturn(client);
     when(() => client.state).thenReturn(clientState);
+    when(() => client.wsConnectionStatus)
+        .thenReturn(ConnectionStatus.connected);
+    when(() => client.wsConnectionStatusStream)
+        .thenAnswer((_) => Stream.value(ConnectionStatus.connected));
   });
 
   group('MessageListPage', () {
     testWidgets('renders a MessageListView', (tester) async {
       await tester.pumpApp(
         MessageListPage(channel: channel),
+        streamChatClient: client,
       );
       await tester.pumpAndSettle();
-      // await tester.takeException();
       expect(find.byType(MessageListView), findsOneWidget);
     });
   });
