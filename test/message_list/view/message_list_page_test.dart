@@ -260,9 +260,11 @@ void main() {
         ),
       ]);
 
-      await tester.pumpApp(
-        Scaffold(body: AttachmentView(message: message)),
-      );
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          Scaffold(body: AttachmentView(message: message)),
+        );
+      });
 
       await tester.ensureVisible(find.byType(AttachmentView));
       await tester.pumpAndSettle();
