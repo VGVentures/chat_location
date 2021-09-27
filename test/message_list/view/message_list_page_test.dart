@@ -323,9 +323,9 @@ void main() {
         (tester) async {
       final MessageListCubit mockMessageListCubit = MockMessageListCubit();
 
-      when(() => mockMessageListCubit.state).thenReturn(
-        MessageListState(channel: channel),
-      );
+      when(() => mockMessageListCubit.state)
+          .thenReturn(MessageListState(channel: channel));
+      when(() => channel.state).thenReturn(channelClientState);
       when(() => channelClientState.read).thenReturn([]);
       when(() => channelClientState.messagesStream).thenAnswer(
         (_) => Stream.value([
@@ -337,26 +337,26 @@ void main() {
               )
             ],
             user: User(id: 'id'),
-          )
+          ),
         ]),
       );
       when(() => channelClientState.isUpToDateStream)
           .thenAnswer((_) => Stream.value(true));
       when(() => channelClientState.isUpToDate).thenReturn(true);
 
-      await mockNetworkImages(() async {
-        await tester.pumpApp(
-          BlocProvider.value(
-            value: mockMessageListCubit,
-            child: const MessageListView(),
-          ),
-          streamChatClient: client,
-        );
+      await tester.runAsync(() async {
+        await mockNetworkImages(() async {
+          await tester.pumpApp(
+            BlocProvider.value(
+              value: mockMessageListCubit,
+              child: const MessageListView(),
+            ),
+            streamChatClient: client,
+          );
+          await tester.pumpAndSettle();
+          expect(find.byType(AttachmentView), findsOneWidget);
+        });
       });
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(AttachmentView), findsOneWidget);
     });
   });
 }
