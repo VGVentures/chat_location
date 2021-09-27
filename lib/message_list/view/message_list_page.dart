@@ -121,9 +121,10 @@ class AttachmentView extends StatelessWidget {
     final latitude = message.attachments.first.extraData['latitude'] ?? 0.0;
     final longitude = message.attachments.first.extraData['longitude'] ?? 0.0;
     return InkWell(
+      key: const Key('attachmentView_attachment_inkWell'),
       onTap: () async {
         await Navigator.of(context).push(
-          MaterialPageRoute<MessageLocationPage>(
+          MaterialPageRoute<void>(
             builder: (_) => MessageLocationPage(message: message),
           ),
         );

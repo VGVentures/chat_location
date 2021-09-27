@@ -21,6 +21,8 @@ class MockClientState extends Mock implements ClientState {}
 
 class MockMessage extends Mock implements Message {}
 
+class MockUser extends Mock implements User {}
+
 class MockMessageListCubit extends MockCubit<MessageListState>
     implements MessageListCubit {}
 
@@ -51,41 +53,42 @@ void main() {
     client = MockStreamChatClient();
     clientState = MockClientState();
 
+    when(() => channel.client).thenReturn(client);
+    when(() => channel.imageStream).thenAnswer((_) => Stream.value(null));
     when(() => channel.initialized).thenAnswer((_) async => true);
+    when(() => channel.nameStream).thenAnswer((_) => Stream.value('channel'));
     when(() => channel.on(any(), any(), any(), any()))
         .thenAnswer((_) => const Stream.empty());
-    when(() => channel.nameStream).thenAnswer((_) => Stream.value('channel'));
-    when(() => channel.imageStream).thenAnswer((_) => Stream.value(null));
     when(() => channel.state).thenReturn(channelClientState);
 
-    when(() => channelClientState.threadsStream)
-        .thenAnswer((_) => const Stream.empty());
+    when(() => channelClientState.isUpToDate).thenReturn(true);
+    when(() => channelClientState.messages).thenReturn([]);
     when(() => channelClientState.messagesStream)
         .thenAnswer((_) => const Stream.empty());
-    when(() => channelClientState.messages).thenReturn([]);
-    when(() => channelClientState.isUpToDate).thenReturn(true);
     when(() => channelClientState.members).thenReturn([]);
     when(() => channelClientState.membersStream)
         .thenAnswer((_) => Stream.value([]));
-    when(() => channelClientState.unreadCount).thenReturn(0);
-    when(() => channelClientState.unreadCountStream)
-        .thenAnswer((_) => Stream.value(0));
+    when(() => channelClientState.threadsStream)
+        .thenAnswer((_) => const Stream.empty());
     when(() => channelClientState.typingEvents).thenReturn({});
     when(() => channelClientState.typingEventsStream)
         .thenAnswer((_) => Stream.value({}));
-
-    when(() => clientState.totalUnreadCount).thenReturn(0);
-    when(() => clientState.totalUnreadCountStream)
+    when(() => channelClientState.unreadCount).thenReturn(0);
+    when(() => channelClientState.unreadCountStream)
         .thenAnswer((_) => Stream.value(0));
-    when(() => clientState.currentUser).thenReturn(FakeOwnUser());
-    when(() => clientState.currentUserStream)
-        .thenAnswer((_) => Stream.value(FakeOwnUser()));
-    when(() => channel.client).thenReturn(client);
+
     when(() => client.state).thenReturn(clientState);
     when(() => client.wsConnectionStatus)
         .thenReturn(ConnectionStatus.connected);
     when(() => client.wsConnectionStatusStream)
         .thenAnswer((_) => Stream.value(ConnectionStatus.connected));
+
+    when(() => clientState.currentUser).thenReturn(FakeOwnUser());
+    when(() => clientState.currentUserStream)
+        .thenAnswer((_) => Stream.value(FakeOwnUser()));
+    when(() => clientState.totalUnreadCount).thenReturn(0);
+    when(() => clientState.totalUnreadCountStream)
+        .thenAnswer((_) => Stream.value(0));
   });
 
   group('MessageListPage', () {
@@ -100,6 +103,8 @@ void main() {
   });
 
   group('MessageListView', () {
+    const attachmentInkWellKey = Key('attachmentView_attachment_inkWell');
+
     setUpAll(() {
       registerFallbackValue<MessageListState>(FakeMessageListState());
       registerFallbackValue<PageRoute<dynamic>>(FakePageRoute());
@@ -275,8 +280,10 @@ void main() {
     testWidgets(
         'navigates to MessageLocationPage '
         'when pressing Attachment', (tester) async {
-      final navigator = MockNavigator();
       final message = MockMessage();
+      final navigator = MockNavigator();
+      final user = MockUser();
+      const username = 'user-1';
       final attachments = [
         Attachment(
           type: 'location',
@@ -287,6 +294,8 @@ void main() {
 
       when(() => navigator.push(any())).thenAnswer((_) async {});
       when(() => message.attachments).thenReturn(attachments);
+      when(() => message.user).thenReturn(user);
+      when(() => user.name).thenReturn(username);
 
       await mockNetworkImages(() async {
         await tester.pumpApp(
@@ -296,10 +305,11 @@ void main() {
               body: AttachmentView(message: message),
             ),
           ),
+          streamChatClient: client,
         );
       });
       await tester.ensureVisible(find.byType(AttachmentView));
-      await tester.tap(find.byType(InkWell));
+      await tester.tap(find.byKey(attachmentInkWellKey));
       await tester.pumpAndSettle();
 
       verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
