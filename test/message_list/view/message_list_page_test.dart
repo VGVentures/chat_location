@@ -39,6 +39,9 @@ class FakeOwnUser extends Fake implements OwnUser {
 
   @override
   bool get online => true;
+
+  @override
+  String? get language => 'en-us';
 }
 
 void main() {
@@ -320,21 +323,26 @@ void main() {
         (tester) async {
       final MessageListCubit mockMessageListCubit = MockMessageListCubit();
 
-      whenListen(
-        mockMessageListCubit,
-        Stream.value(
-          [
-            MessageListState(channel: channel),
-            MessageListState(
-              channel: channel,
-              location: const CurrentLocation(
-                status: CurrentLocationStatus.available,
-              ),
-            ),
-          ],
-        ),
-        initialState: MessageListState(channel: channel),
+      when(() => mockMessageListCubit.state).thenReturn(
+        MessageListState(channel: channel),
       );
+      when(() => channelClientState.read).thenReturn([]);
+      when(() => channelClientState.messagesStream).thenAnswer(
+        (_) => Stream.value([
+          Message(
+            attachments: [
+              Attachment(
+                type: 'location',
+                extraData: const {'latitude': 0.0, 'longitude': 0.0},
+              )
+            ],
+            user: User(id: 'id'),
+          )
+        ]),
+      );
+      when(() => channelClientState.isUpToDateStream)
+          .thenAnswer((_) => Stream.value(true));
+      when(() => channelClientState.isUpToDate).thenReturn(true);
 
       await mockNetworkImages(() async {
         await tester.pumpApp(
