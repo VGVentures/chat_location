@@ -112,7 +112,10 @@ class _MessageListViewState extends State<MessageListView> {
 }
 
 class AttachmentView extends StatelessWidget {
-  const AttachmentView({Key? key, required this.message}) : super(key: key);
+  const AttachmentView({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
 
   final Message message;
 

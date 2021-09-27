@@ -314,5 +314,41 @@ void main() {
 
       verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
     });
+
+    testWidgets(
+        'renders correct AttachmentView when onGenerateAttachments is called',
+        (tester) async {
+      final MessageListCubit mockMessageListCubit = MockMessageListCubit();
+
+      whenListen(
+        mockMessageListCubit,
+        Stream.value(
+          [
+            MessageListState(channel: channel),
+            MessageListState(
+              channel: channel,
+              location: const CurrentLocation(
+                status: CurrentLocationStatus.available,
+              ),
+            ),
+          ],
+        ),
+        initialState: MessageListState(channel: channel),
+      );
+
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          BlocProvider.value(
+            value: mockMessageListCubit,
+            child: const MessageListView(),
+          ),
+          streamChatClient: client,
+        );
+      });
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AttachmentView), findsOneWidget);
+    });
   });
 }
