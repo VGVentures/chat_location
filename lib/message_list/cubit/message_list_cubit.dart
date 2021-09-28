@@ -29,7 +29,7 @@ class MessageListCubit extends Cubit<MessageListState> {
           location: state.location.copyWith(
             status: CurrentLocationStatus.available,
             latitude: location.latitude,
-            longtitude: location.longitude,
+            longitude: location.longitude,
           ),
         ),
       );

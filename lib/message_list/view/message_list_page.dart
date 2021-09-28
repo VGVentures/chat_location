@@ -1,7 +1,7 @@
 import 'package:chat_location/message_list/message_list.dart';
+import 'package:chat_location/message_location/message_location.dart';
 import 'package:chat_repository/chat_repository.dart';
 import 'package:chat_ui/chat_ui.dart' as chat_ui;
-import 'package:chat_ui/chat_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,7 @@ class MessageListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChannelAppBar(channel: _channel),
+      appBar: chat_ui.ChannelAppBar(channel: _channel),
       body: BlocProvider(
         create: (context) => MessageListCubit(
           channel: _channel,
@@ -69,7 +69,7 @@ class _MessageListViewState extends State<MessageListView> {
               uploadState: const UploadState.success(),
               extraData: {
                 'latitude': state.location.latitude,
-                'longitude': state.location.longtitude,
+                'longitude': state.location.longitude,
               },
             ),
           );
@@ -77,7 +77,14 @@ class _MessageListViewState extends State<MessageListView> {
       },
       child: Column(
         children: [
-          Expanded(child: chat_ui.MessageListView(channel: channel)),
+          Expanded(
+            child: chat_ui.MessageListView(
+              channel: channel,
+              onGenerateAttachments: {
+                'location': (_, message) => AttachmentView(message: message)
+              },
+            ),
+          ),
           chat_ui.MessageInput(
             controller: _controller,
             channel: channel,
@@ -92,13 +99,42 @@ class _MessageListViewState extends State<MessageListView> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.location_history),
-                onPressed: () {
-                  context.read<MessageListCubit>().locationRequested();
+                onPressed: () async {
+                  await context.read<MessageListCubit>().locationRequested();
                 },
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AttachmentView extends StatelessWidget {
+  const AttachmentView({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  final Message message;
+
+  @override
+  Widget build(BuildContext context) {
+    final latitude = message.attachments.first.extraData['latitude'] ?? 0.0;
+    final longitude = message.attachments.first.extraData['longitude'] ?? 0.0;
+    return InkWell(
+      key: const Key('attachmentView_attachment_inkWell'),
+      onTap: () async {
+        await Navigator.of(context).push<void>(
+          MessageLocationPage.route(message),
+        );
+      },
+      child: chat_ui.Attachment(
+        child: MapThumbnailImage(
+          latitude: latitude as double,
+          longitude: longitude as double,
+        ),
       ),
     );
   }

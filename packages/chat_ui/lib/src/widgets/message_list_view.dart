@@ -20,9 +20,9 @@ class MessageListView extends StatelessWidget {
   const MessageListView({
     Key? key,
     required stream_chat_flutter.Channel channel,
-    OnGenerateAttachements? onGenerateAttachements,
+    OnGenerateAttachements? onGenerateAttachments,
   })  : _channel = channel,
-        _onGenerateAttachements = onGenerateAttachements ?? const {},
+        _onGenerateAttachements = onGenerateAttachments ?? const {},
         super(key: key);
 
   final stream_chat_flutter.Channel _channel;

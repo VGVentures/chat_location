@@ -78,7 +78,7 @@ void main() {
             client: client,
             child: MessageListView(
               channel: channel,
-              onGenerateAttachements: {
+              onGenerateAttachments: {
                 'custom': (context, attachment) {
                   onGenerateAttachementsCallCount++;
                   return const SizedBox();

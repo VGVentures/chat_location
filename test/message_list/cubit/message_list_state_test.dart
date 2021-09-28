@@ -26,14 +26,14 @@ void main() {
     test('copyWith creates a new instance with modified location', () {
       final stateA = MessageListState(channel: channel);
       final stateB = stateA.copyWith(
-        location: stateA.location.copyWith(latitude: 42, longtitude: 42),
+        location: stateA.location.copyWith(latitude: 42, longitude: 42),
       );
       expect(
         stateB,
         equals(
           MessageListState(
             channel: channel,
-            location: const CurrentLocation(latitude: 42, longtitude: 42),
+            location: const CurrentLocation(latitude: 42, longitude: 42),
           ),
         ),
       );

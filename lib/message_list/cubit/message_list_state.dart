@@ -5,25 +5,25 @@ enum CurrentLocationStatus { unavailable, available, pending }
 class CurrentLocation extends Equatable {
   const CurrentLocation({
     this.latitude = 0.0,
-    this.longtitude = 0.0,
+    this.longitude = 0.0,
     this.status = CurrentLocationStatus.pending,
   });
 
   final double latitude;
-  final double longtitude;
+  final double longitude;
   final CurrentLocationStatus status;
 
   @override
-  List<Object> get props => [latitude, longtitude, status];
+  List<Object> get props => [latitude, longitude, status];
 
   CurrentLocation copyWith({
     double? latitude,
-    double? longtitude,
+    double? longitude,
     CurrentLocationStatus? status,
   }) {
     return CurrentLocation(
       latitude: latitude ?? this.latitude,
-      longtitude: longtitude ?? this.longtitude,
+      longitude: longitude ?? this.longitude,
       status: status ?? this.status,
     );
   }

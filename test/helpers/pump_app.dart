@@ -14,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class FakeStreamChatClient extends Fake implements StreamChatClient {
   @override
@@ -24,29 +23,41 @@ class FakeStreamChatClient extends Fake implements StreamChatClient {
     String? eventType3,
     String? eventType4,
   ]) async* {}
+
+  @override
+  ConnectionStatus get wsConnectionStatus => ConnectionStatus.connected;
+
+  @override
+  Stream<ConnectionStatus> get wsConnectionStatusStream =>
+      Stream.value(ConnectionStatus.connected);
+
+  @override
+  void closeConnection() {}
 }
 
 class MockChatRepository extends Mock implements ChatRepository {}
 
 extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget, {ChatRepository? chatRepository}) async {
-    await mockNetworkImages(() async {
-      await pumpWidget(
-        RepositoryProvider.value(
-          value: chatRepository ?? MockChatRepository(),
-          child: MaterialApp(
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: chat_ui.StreamChat(
-              client: FakeStreamChatClient(),
-              child: widget,
-            ),
+  Future<void> pumpApp(
+    Widget widget, {
+    ChatRepository? chatRepository,
+    StreamChatClient? streamChatClient,
+  }) async {
+    await pumpWidget(
+      RepositoryProvider.value(
+        value: chatRepository ?? MockChatRepository(),
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: chat_ui.StreamChat(
+            client: streamChatClient ?? FakeStreamChatClient(),
+            child: widget,
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }
