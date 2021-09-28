@@ -8,6 +8,12 @@ class MessageLocationPage extends StatelessWidget {
     required this.message,
   }) : super(key: key);
 
+  static Route route(Message message) {
+    return MaterialPageRoute<void>(
+      builder: (_) => MessageLocationPage(message: message),
+    );
+  }
+
   final Message message;
 
   @override

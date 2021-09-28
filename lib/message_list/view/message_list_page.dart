@@ -126,10 +126,8 @@ class AttachmentView extends StatelessWidget {
     return InkWell(
       key: const Key('attachmentView_attachment_inkWell'),
       onTap: () async {
-        await Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => MessageLocationPage(message: message),
-          ),
+        await Navigator.of(context).push<void>(
+          MessageLocationPage.route(message),
         );
       },
       child: chat_ui.Attachment(

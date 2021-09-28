@@ -281,44 +281,6 @@ void main() {
     });
 
     testWidgets(
-        'navigates to MessageLocationPage '
-        'when pressing Attachment', (tester) async {
-      final message = MockMessage();
-      final navigator = MockNavigator();
-      final user = MockUser();
-      const username = 'user-1';
-      final attachments = [
-        Attachment(
-          type: 'location',
-          uploadState: const UploadState.success(),
-          extraData: const {'latitude': 42.0, 'longitude': 42.0},
-        ),
-      ];
-
-      when(() => navigator.push(any())).thenAnswer((_) async {});
-      when(() => message.attachments).thenReturn(attachments);
-      when(() => message.user).thenReturn(user);
-      when(() => user.name).thenReturn(username);
-
-      await mockNetworkImages(() async {
-        await tester.pumpApp(
-          MockNavigatorProvider(
-            navigator: navigator,
-            child: Scaffold(
-              body: AttachmentView(message: message),
-            ),
-          ),
-          streamChatClient: client,
-        );
-      });
-      await tester.ensureVisible(find.byType(AttachmentView));
-      await tester.tap(find.byKey(attachmentInkWellKey));
-      await tester.pumpAndSettle();
-
-      verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
-    });
-
-    testWidgets(
         'renders correct AttachmentView when onGenerateAttachments is called',
         (tester) async {
       final MessageListCubit mockMessageListCubit = MockMessageListCubit();
@@ -357,6 +319,39 @@ void main() {
           expect(find.byType(AttachmentView), findsOneWidget);
         });
       });
+    });
+
+    testWidgets(
+        'navigates to MessageLocationPage '
+        'when pressing Attachment', (tester) async {
+      final navigator = MockNavigator();
+
+      when(() => navigator.push(any())).thenAnswer((_) async => null);
+
+      await mockNetworkImages(() async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: Material(
+              child: AttachmentView(
+                message: Message(
+                  attachments: [
+                    Attachment(
+                      type: 'location',
+                      extraData: const {'latitude': 0.0, 'longitude': 0.0},
+                    )
+                  ],
+                  user: User(id: 'id', name: 'username'),
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+      await tester.tap(find.byKey(attachmentInkWellKey));
+      await tester.pumpAndSettle();
+
+      verify(() => navigator.push(any())).called(1);
     });
   });
 }
