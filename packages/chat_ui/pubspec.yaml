@@ -9,30 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stream_chat_flutter: ^2.0.0
+  stream_chat_flutter: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.1.4
   very_good_analysis: ^2.3.0
-
-dependency_overrides:
-  stream_chat:
-    git:
-      url: https://github.com/GetStream/stream-chat-flutter
-      path: packages/stream_chat
-      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5
-  stream_chat_flutter:
-    git:
-      url: https://github.com/GetStream/stream-chat-flutter
-      path: packages/stream_chat_flutter
-      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5
-  stream_chat_flutter_core:
-    git:
-      url: https://github.com/GetStream/stream-chat-flutter
-      path: packages/stream_chat_flutter_core
-      ref: 6f677de5287646a802b8b809a3ee0592d355d4b5
 
 flutter:
   uses-material-design: true
