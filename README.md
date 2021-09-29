@@ -1,7 +1,7 @@
 # Chat Location
 
 <!-- <a href="https://verygood.ventures/blog/very-good-location-sharing-chat-app"><img src="https://raw.githubusercontent.com/VGVentures/chat_location/main/assets/chat_location.gif" height="1280" width="720"/></a> -->
-<a href="https://verygood.ventures/blog/very-good-location-sharing-chat-app"><img src="https://github.com/VGVentures/chat_location/blob/chore/add-app-gif/assets/chat_location.gif" height="1280" width="720"/></a>
+<a href="https://verygood.ventures/blog/very-good-location-sharing-chat-app"><img src="https://github.com/VGVentures/chat_location/blob/chore/add-app-gif/assets/chat_location.gif" height="992" width="558"/></a>
 
 [![chat_location][build_status_badge]][build_status_link]
 ![coverage][coverage_badge]
