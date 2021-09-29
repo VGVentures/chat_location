@@ -1,5 +1,7 @@
 # Chat Location
 
+![app][app_gif]
+
 [![chat_location][build_status_badge]][build_status_link]
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
@@ -155,6 +157,7 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 }
 ```
 
+[app_gif]: assets/chat_location.gif
 [build_status_badge]: https://github.com/felangel/chat_location/actions/workflows/main.yaml/badge.svg
 [build_status_link]: https://github.com/felangel/chat_location/actions/workflows/main.yaml
 [coverage_badge]: coverage_badge.svg
