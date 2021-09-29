@@ -1,6 +1,7 @@
 # Chat Location
 
-![app][app_gif]
+<!-- <a href="https://verygood.ventures/blog/very-good-location-sharing-chat-app"><img src="https://raw.githubusercontent.com/VGVentures/chat_location/main/assets/chat_location.gif" height="1280" width="720"/></a> -->
+<a href="https://verygood.ventures/blog/very-good-location-sharing-chat-app"><img src="https://github.com/VGVentures/chat_location/blob/chore/add-app-gif/assets/chat_location.gif" height="1280" width="720"/></a>
 
 [![chat_location][build_status_badge]][build_status_link]
 ![coverage][coverage_badge]
@@ -157,7 +158,6 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 }
 ```
 
-[app_gif]: assets/chat_location.gif
 [build_status_badge]: https://github.com/felangel/chat_location/actions/workflows/main.yaml/badge.svg
 [build_status_link]: https://github.com/felangel/chat_location/actions/workflows/main.yaml
 [coverage_badge]: coverage_badge.svg
