@@ -159,7 +159,7 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 [build_status_link]: https://github.com/felangel/chat_location/actions/workflows/main.yaml
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
-[stream_chat_link]: https://getstream.io/chat/sdk/flutter/
+[stream_chat_link]: https://getstream.io/chat/sdk/flutter
 [internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
