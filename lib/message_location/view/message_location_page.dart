@@ -23,11 +23,7 @@ class MessageLocationPage extends StatelessWidget {
     final position = LatLng(latitude as double, longitude as double);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          message.user?.name ?? '...',
-          style: const TextStyle(color: Colors.black),
-        ),
+        title: Text(message.user?.name ?? '...'),
       ),
       body: ConstrainedBox(
         constraints: BoxConstraints.loose(MediaQuery.of(context).size),
